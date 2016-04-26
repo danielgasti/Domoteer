@@ -15,6 +15,18 @@ namespace Domoteer {
     
     public partial class Program : Gadgeteer.Program {
         
+        /// <summary>The Display T35 module using sockets 14, 13, 12 and 10 of the mainboard.</summary>
+        private Gadgeteer.Modules.GHIElectronics.DisplayT35 displayT35;
+        
+        /// <summary>The Ethernet J11D module using socket 7 of the mainboard.</summary>
+        private Gadgeteer.Modules.GHIElectronics.EthernetJ11D ethernetJ11D;
+        
+        /// <summary>The USB Client DP module using socket 1 of the mainboard.</summary>
+        private Gadgeteer.Modules.GHIElectronics.USBClientDP usbClientDP;
+        
+        /// <summary>The Multicolor LED module using socket 11 of the mainboard.</summary>
+        private Gadgeteer.Modules.GHIElectronics.MulticolorLED multicolorLED;
+        
         /// <summary>This property provides access to the Mainboard API. This is normally not necessary for an end user program.</summary>
         protected new static GHIElectronics.Gadgeteer.FEZSpider Mainboard {
             get {
@@ -37,6 +49,10 @@ namespace Domoteer {
         }
         
         private void InitializeModules() {
+            this.displayT35 = new GTM.GHIElectronics.DisplayT35(14, 13, 12, 10);
+            this.ethernetJ11D = new GTM.GHIElectronics.EthernetJ11D(7);
+            this.usbClientDP = new GTM.GHIElectronics.USBClientDP(1);
+            this.multicolorLED = new GTM.GHIElectronics.MulticolorLED(11);
         }
     }
 }
