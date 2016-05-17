@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Le informazioni generali relative a un assembly sono controllate dal seguente 
 // set di attributi. Modificare i valori di questi attributi per modificare le informazioni
 // associate a un assembly.
-[assembly: AssemblyTitle("DomoteerRestWcfService")]
+[assembly: AssemblyTitle("DomoteerWcfService")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DomoteerRestWcfService")]
+[assembly: AssemblyProduct("DomoteerWcfService")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Se il progetto viene esposto a COM, il GUID che segue verrà utilizzato per creare l'ID della libreria dei tipi
-[assembly: Guid("8ffd64ed-224b-407f-b4ab-453c135d9595")]
+[assembly: Guid("b4f1ae95-88a4-4572-8337-34cb11ddf810")]
 
 // Le informazioni sulla versione di un assembly sono costituite dai quattro valori seguenti:
 //

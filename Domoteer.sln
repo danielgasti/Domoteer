@@ -3,13 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domoteer", "Domoteer\Domoteer.csproj", "{60B6960D-AFC2-40A7-A3D8-3EF25FCD63E8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Re_Do_Do", "Re_Do_Do\Re_Do_Do.csproj", "{4C292430-F44B-4CDA-86DA-A6C57C5A00CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomoteerRestWcfService", "DomoteerRestWcfService\DomoteerRestWcfService.csproj", "{FE723788-A568-4159-9463-8F0F9188D31B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomoteerWcfServiceLibrary", "DomoteerWcfServiceLibrary\DomoteerWcfServiceLibrary.csproj", "{D5CD0DEB-EE4E-430E-8AA8-110FB79A67FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomoteerWcfService", "DomoteerWcfService\DomoteerWcfService.csproj", "{6532512C-06D3-4C92-9360-30DB1E2A3EEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,26 +13,16 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{60B6960D-AFC2-40A7-A3D8-3EF25FCD63E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{60B6960D-AFC2-40A7-A3D8-3EF25FCD63E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{60B6960D-AFC2-40A7-A3D8-3EF25FCD63E8}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{60B6960D-AFC2-40A7-A3D8-3EF25FCD63E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{60B6960D-AFC2-40A7-A3D8-3EF25FCD63E8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{60B6960D-AFC2-40A7-A3D8-3EF25FCD63E8}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{4C292430-F44B-4CDA-86DA-A6C57C5A00CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4C292430-F44B-4CDA-86DA-A6C57C5A00CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C292430-F44B-4CDA-86DA-A6C57C5A00CD}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{4C292430-F44B-4CDA-86DA-A6C57C5A00CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C292430-F44B-4CDA-86DA-A6C57C5A00CD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4C292430-F44B-4CDA-86DA-A6C57C5A00CD}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{FE723788-A568-4159-9463-8F0F9188D31B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE723788-A568-4159-9463-8F0F9188D31B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FE723788-A568-4159-9463-8F0F9188D31B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE723788-A568-4159-9463-8F0F9188D31B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D5CD0DEB-EE4E-430E-8AA8-110FB79A67FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D5CD0DEB-EE4E-430E-8AA8-110FB79A67FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D5CD0DEB-EE4E-430E-8AA8-110FB79A67FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D5CD0DEB-EE4E-430E-8AA8-110FB79A67FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6532512C-06D3-4C92-9360-30DB1E2A3EEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6532512C-06D3-4C92-9360-30DB1E2A3EEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6532512C-06D3-4C92-9360-30DB1E2A3EEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6532512C-06D3-4C92-9360-30DB1E2A3EEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

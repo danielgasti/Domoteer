@@ -117,7 +117,7 @@
           <moduleHasSocketUses Id="e6cea37e-fdfd-4f35-a75d-677faa764dea">
             <socketUse Id="6775ad35-2866-4e90-b654-e57ed085b29c" label="E">
               <socket>
-                <socketUseReferencesSocket Id="ce65129d-af41-429c-826c-39c6e087f683">
+                <socketUseReferencesSocket Id="bcd497ae-c88a-4086-bffa-ea44915b077e">
                   <socketMoniker Id="e5e30331-5584-49ee-a4a3-d237651b8b42" />
                 </socketUseReferencesSocket>
               </socket>
@@ -134,6 +134,21 @@
               <socket>
                 <socketUseReferencesSocket Id="caa7fc49-4bde-4c1e-9430-ba629a00e72a">
                   <socketMoniker Id="d5c360e6-647b-4261-8857-61814ff9f62c" />
+                </socketUseReferencesSocket>
+              </socket>
+            </socketUse>
+          </moduleHasSocketUses>
+        </socketUses>
+      </module>
+    </gadgeteerModelHasGadgeteerHardware>
+    <gadgeteerModelHasGadgeteerHardware Id="4efce9ce-8f63-4be5-8eea-807c32eb32ff">
+      <module Id="f70006e3-f7c2-44b7-9d1b-12c141c70835" cachedDefinition="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-16&quot;?&gt;&#xD;&#xA;&lt;ModuleDefinition xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; Name=&quot;Camera&quot; Manufacturer=&quot;GHI Electronics&quot; Description=&quot;A Camera module&quot; Type=&quot;Gadgeteer.Modules.GHIElectronics.Camera&quot; HardwareVersion=&quot;1.1&quot; Image=&quot;C:\Program Files (x86)\GHI Electronics\.NET Gadgeteer SDK\Modules\Camera\Image.jpg&quot; BoardWidth=&quot;47&quot; BoardHeight=&quot;27&quot; MinimumGadgeteerCoreVersion=&quot;2.43.800&quot; HelpUrl=&quot;http://www.ghielectronics.com/catalog/product/283&quot; UniqueId=&quot;b1da61a6-eebb-4fa6-a2e8-b406982ec791&quot; InstanceName=&quot;camera&quot; ModuleSuppliesPower=&quot;false&quot;&gt;&#xD;&#xA;  &lt;Power&gt;&#xD;&#xA;    &lt;PowerRequirements Voltage=&quot;3.3&quot;&gt;&#xD;&#xA;      &lt;TypicalCurrent&gt;0&lt;/TypicalCurrent&gt;&#xD;&#xA;      &lt;MaximumCurrent&gt;0&lt;/MaximumCurrent&gt;&#xD;&#xA;    &lt;/PowerRequirements&gt;&#xD;&#xA;    &lt;PowerRequirements Voltage=&quot;5&quot;&gt;&#xD;&#xA;      &lt;TypicalCurrent&gt;0.055&lt;/TypicalCurrent&gt;&#xD;&#xA;      &lt;MaximumCurrent&gt;0.055&lt;/MaximumCurrent&gt;&#xD;&#xA;    &lt;/PowerRequirements&gt;&#xD;&#xA;  &lt;/Power&gt;&#xD;&#xA;  &lt;ProvidedSockets /&gt;&#xD;&#xA;  &lt;Assemblies&gt;&#xD;&#xA;    &lt;Assembly MFVersion=&quot;4.2&quot; Name=&quot;GTM.GHIElectronics.Camera&quot; /&gt;&#xD;&#xA;    &lt;Assembly MFVersion=&quot;4.3&quot; Name=&quot;GTM.GHIElectronics.Camera&quot; /&gt;&#xD;&#xA;    &lt;Assembly MFVersion=&quot;4.2&quot; Name=&quot;GHI.Premium.System&quot; ErrorMessage=&quot;GHI.Premium.System could not be found.&quot; /&gt;&#xD;&#xA;    &lt;Assembly MFVersion=&quot;4.2&quot; Name=&quot;GHI.Premium.USBHost&quot; ErrorMessage=&quot;GHI.Premium.USBHost could not be found.&quot; /&gt;&#xD;&#xA;    &lt;Assembly MFVersion=&quot;4.3&quot; Name=&quot;GHI.Hardware&quot; ErrorMessage=&quot;GHI.Hardware could not be found.&quot; /&gt;&#xD;&#xA;    &lt;Assembly MFVersion=&quot;4.3&quot; Name=&quot;GHI.Usb&quot; ErrorMessage=&quot;GHI.Usb could not be found.&quot; /&gt;&#xD;&#xA;  &lt;/Assemblies&gt;&#xD;&#xA;  &lt;LibrariesProvided /&gt;&#xD;&#xA;  &lt;Sockets&gt;&#xD;&#xA;    &lt;Socket Orientation=&quot;180&quot; Left=&quot;43.57&quot; Top=&quot;13.32&quot; TypesLabel=&quot;H&quot; ConstructorOrder=&quot;1&quot; Optional=&quot;false&quot;&gt;&#xD;&#xA;      &lt;Types&gt;&#xD;&#xA;        &lt;Type&gt;H&lt;/Type&gt;&#xD;&#xA;      &lt;/Types&gt;&#xD;&#xA;      &lt;Pins&gt;&#xD;&#xA;        &lt;Pin Shared=&quot;false&quot;&gt;3&lt;/Pin&gt;&#xD;&#xA;        &lt;Pin Shared=&quot;false&quot;&gt;4&lt;/Pin&gt;&#xD;&#xA;        &lt;Pin Shared=&quot;false&quot;&gt;5&lt;/Pin&gt;&#xD;&#xA;      &lt;/Pins&gt;&#xD;&#xA;    &lt;/Socket&gt;&#xD;&#xA;  &lt;/Sockets&gt;&#xD;&#xA;  &lt;ExtraLibrariesRequired&gt;&#xD;&#xA;    &lt;Assembly MFVersion=&quot;4.2&quot; Name=&quot;GHI.Premium.System&quot; ErrorMessage=&quot;GHI.Premium.System could not be found.&quot; /&gt;&#xD;&#xA;    &lt;Assembly MFVersion=&quot;4.2&quot; Name=&quot;GHI.Premium.USBHost&quot; ErrorMessage=&quot;GHI.Premium.USBHost could not be found.&quot; /&gt;&#xD;&#xA;    &lt;Assembly MFVersion=&quot;4.3&quot; Name=&quot;GHI.Hardware&quot; ErrorMessage=&quot;GHI.Hardware could not be found.&quot; /&gt;&#xD;&#xA;    &lt;Assembly MFVersion=&quot;4.3&quot; Name=&quot;GHI.Usb&quot; ErrorMessage=&quot;GHI.Usb could not be found.&quot; /&gt;&#xD;&#xA;  &lt;/ExtraLibrariesRequired&gt;&#xD;&#xA;&lt;/ModuleDefinition&gt;" name="camera" moduleType="Gadgeteer.Modules.GHIElectronics.Camera" moduleDefinitionId="b1da61a6-eebb-4fa6-a2e8-b406982ec791">
+        <socketUses>
+          <moduleHasSocketUses Id="d4f364d0-03b4-41cf-a34e-e7d9da0f4df2">
+            <socketUse Id="73dd466c-855e-428f-b569-fc2d0b9eedf7" label="H">
+              <socket>
+                <socketUseReferencesSocket Id="871c02d4-1d4e-4461-b9b0-ecdc066e21b6">
+                  <socketMoniker Id="865bc8cb-5d02-4abf-9307-016ccfc31477" />
                 </socketUseReferencesSocket>
               </socket>
             </socketUse>

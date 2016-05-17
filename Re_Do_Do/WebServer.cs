@@ -7,6 +7,9 @@ using Gadgeteer.Networking;
 using System.Threading;
 using Gadgeteer;
 using System.Text;
+using System.IO;
+
+
 namespace Re_Do_Do
 {
     class DomoteerWebServer
@@ -15,14 +18,23 @@ namespace Re_Do_Do
         MulticolorLED led;
         DisplayT35 display;
 
-        byte[] HTML = Encoding.UTF8.GetBytes(
-                "<html><body>" +
-                "<h1>Hosted on .NET Gadgeteer</h1>" +
-                "<p>Lets scare someone!</p>" +
-                "<form action=\"\" method=\"post\">" +
-                "<input type=\"submit\" value=\"Toggle LED!\">" +
-                "</form>" +
-                "</body></html>");
+        //byte[] HTML = Encoding.UTF8.GetBytes(
+        //        "<html><body>" +
+        //        "<h1>Hosted on .NET Gadgeteer</h1>" +
+        //        "<p>Lets scare someone!</p>" +
+        //        "<form action=\"ciao\" method=\"post\">" +
+        //        "<input type=\"submit\" value=\"Toggle LED!\">" +
+        //        "</form>" +
+        //        "<form action=\"hello\" method=\"post\">" +
+        //        "<input type=\"submit\" value=\"Toggle LED!\">" +
+        //        "</form>" +
+        //        "</body></html>");
+
+        //byte[] HTML = File.ReadAllBytes(@"Resources\test.html");
+        //FileStream htmlWebPage;
+        //htmlWebPage = File.Open("Resources\test.html", );
+
+        
 
         GT.Networking.WebEvent sayHello;
         string ipAddress;
@@ -77,11 +89,20 @@ namespace Re_Do_Do
             // Start the server
             WebServer.StartLocalServer(eth.NetworkSettings.IPAddress, 80);
             WebServer.DefaultEvent.WebEventReceived += DefaultEvent_WebEventReceived;
+
+            helloWebEvent = WebServer.SetupWebEvent("hello");
+            helloWebEvent.WebEventReceived += helloWebEventReceived;
             
+
             while (true)
             {
                 Thread.Sleep(1000);
             }
+        }
+
+        private void helloWebEventReceived(string path, WebServer.HttpMethod method, Responder responder)
+        {
+            led.TurnColor(Color.Yellow);
         }
 
 
@@ -138,17 +159,28 @@ namespace Re_Do_Do
         void DefaultEvent_WebEventReceived(string path, WebServer.HttpMethod method, Responder
                 responder)
         {
+            string str = Resources.GetString(Resources.StringResources.test);
+
+            byte[] HTML = System.Text.Encoding.UTF8.GetBytes(str);
             // We always send the same page back
             responder.Respond(HTML, "text/html;charset=utf-8");
             // If a button was clicked
             if (method == WebServer.HttpMethod.POST)
             {
+                Debug.Print("Path: " + path);
                 led.TurnWhite();
                
             }
+            
         }
+
+      
 
         
 
+
+
+
+        public WebEvent helloWebEvent { get; set; }
     }
 }
