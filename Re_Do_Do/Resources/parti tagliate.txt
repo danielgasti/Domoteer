@@ -1,0 +1,152 @@
+CLASSE PROGRAM.CS 
+-> parte alla fine della classe	
+	//    void ethernetENC28_NetworkDown(GTM.Module.NetworkModule sender, GTM.Module.NetworkModule.NetworkState state)
+        //    {
+        //        Debug.Print("Network Down");
+        //    }
+
+        //    void ethernetENC28_NetworkUp(GTM.Module.NetworkModule sender, GTM.Module.NetworkModule.NetworkState state)
+        //    {
+        //        Debug.Print("Network Up: " + ethernetJ11D.NetworkInterface.IPAddress);
+        //    }
+
+        //    void NetworkChange_NetworkAddressChanged(object sender, EventArgs e)
+        //    {
+        //        lock (_lock)
+        //        {
+        //            Debug.Print("==============================================================");
+        //            Debug.Print("NetworkChange_NetworkAddressChanged");
+        //            Debug.Print("_isNetworkAvailable: " + _isNetworkAvailable);
+
+        //            foreach (var item in NetworkInterface.GetAllNetworkInterfaces())
+        //            {
+        //                Debug.Print("Interface   : " + GetNetworkInterfaceTypeName(item.NetworkInterfaceType));
+        //                Debug.Print("IP          : " + item.IPAddress);
+        //                Debug.Print("..............................................................");
+        //            }
+
+        //            Debug.Print("==============================================================");
+        //        }
+        //    }
+
+        //    void NetworkChange_NetworkAvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
+        //    {
+        //        lock (_lock)
+        //        {
+        //            Debug.Print("--------------------------------------------------------------");
+        //            Debug.Print("NetworkChange_NetworkAvailabilityChanged: " + e.IsAvailable);
+        //            _isNetworkAvailable = e.IsAvailable;
+
+        //            if (e.IsAvailable)
+        //            {
+        //                foreach (var item in NetworkInterface.GetAllNetworkInterfaces())
+        //                {
+        //                    Debug.Print("Interface   : " + GetNetworkInterfaceTypeName(item.NetworkInterfaceType));
+        //                    Debug.Print("IP          : " + item.IPAddress);
+        //                    Debug.Print("Mask        : " + item.SubnetMask);
+        //                    Debug.Print("Gateway     : " + item.GatewayAddress);
+        //                    Debug.Print("DCHP Enable : " + item.IsDhcpEnabled);
+        //                    foreach (var dns in item.DnsAddresses)
+        //                    {
+        //                        Debug.Print("DNS         : " + dns);
+        //                    }
+        //                    Debug.Print("..............................................................");
+        //                }
+        //            }
+
+        //            Debug.Print("--------------------------------------------------------------");
+        //        }
+        //    }
+
+        //    private string GetNetworkInterfaceTypeName(NetworkInterfaceType t)
+        //    {
+        //        switch (t)
+        //        {
+        //            case NetworkInterfaceType.Unknown:
+        //                return "Unknown";
+        //            case NetworkInterfaceType.Ethernet:
+        //                return "Ethernet";
+        //            case NetworkInterfaceType.Wireless80211:
+        //                return "Wireless80211";
+        //        }
+
+        //        return "NULL";
+        //    }
+        //}
+        //public partial class Program
+        //{
+        //    // This method is run when the mainboard is powered up or reset.   
+        //    void ProgramStarted()
+        //    {
+        //        Debug.Print("Program Started");
+        //        DomoteerWebServer Ws = new DomoteerWebServer(ethernetJ11D, multicolorLED);
+        //        Ws.initConnection(ethernetJ11D, multicolorLED);
+
+        //        /*******************************************************************************************
+        //        Modules added in the Program.gadgeteer designer view are used by typing 
+        //        their name followed by a period, e.g.  button.  or  camera.
+
+        //        Many modules generate useful events. Type +=<tab><tab> to add a handler to an event, e.g.:
+        //            button.ButtonPressed +=<tab><tab>
+
+        //        If you want to do something periodically, use a GT.Timer and handle its Tick event, e.g.:
+        //            GT.Timer timer = new GT.Timer(1000); // every second (1000ms)
+        //            timer.Tick +=<tab><tab>
+        //            timer.Start();
+        //        *******************************************************************************************/
+
+        //        // Use Debug.Print to show messages in Visual Studio's "Output" window during debugging.
+        //        Debug.Print("Program Started");
+        //    }
+        //}
+
+
+
+
+CLASS WEBSERVER.CS
+->dopo la dichiarazione delle variabili
+	//byte[] HTML = Encoding.UTF8.GetBytes(
+        //        "<html><body>" +
+        //        "<h1>Hosted on .NET Gadgeteer</h1>" +
+        //        "<p>Lets scare someone!</p>" +
+        //        "<form action=\"ciao\" method=\"post\">" +
+        //        "<input type=\"submit\" value=\"Toggle LED!\">" +
+        //        "</form>" +
+        //        "<form action=\"hello\" method=\"post\">" +
+        //        "<input type=\"submit\" value=\"Toggle LED!\">" +
+        //        "</form>" +
+        //        "</body></html>");
+
+        //byte[] HTML = File.ReadAllBytes(@"Resources\test.html");
+        //FileStream htmlWebPage;
+        //htmlWebPage = File.Open("Resources\test.html", );
+
+
+-> init connection
+            	//ethernetJ11D.NetworkSettings.EnableDhcp();
+            	//ethernetJ11D.NetworkSettings.EnableDynamicDns();
+            	//eth.UseDHCP();
+
+            	//eth.NetworkSettings.EnableStaticIP("192.168.0.222", "255.255.255.0", "192.168.0.1");
+      		//eth.NetworkSettings.PhysicalAddress = ByteExtensions.ToHexByte("002103804AF0");
+
+	        //eth.UseStaticIP("192.168.1.222", "255.255.255.0", "192.168.1.254");
+
+
+->funzione da modificare per la gestione dello schermo
+		 /*
+        	void request_ResponseReceived(HttpRequest sender, HttpResponse response)
+        	{
+            	if (response.StatusCode == "200")
+            	{
+                	//This only works if the bitmap is the same size as the screen it's flushing to
+                	response.Picture.MakeBitmap().Flush();
+            	}
+            	else
+            	{
+                	//Show a helpful error message
+                	display.SimpleGraphics.DisplayText("Request failed with status code " + response.StatusCode, Resources.GetFont(Resources.FontResources.NinaB), Color.White, 0, 0);
+                	display.SimpleGraphics.DisplayText("Response text: " + response.Text, Resources.GetFont(Resources.FontResources.NinaB), Color.White, 0, 50);
+            	}
+        	}
+        	*/	

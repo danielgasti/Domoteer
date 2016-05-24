@@ -124,6 +124,9 @@
     <None Include="Resources\small.tinyfnt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\index.htm" />
+    <None Include="Resources\style.css" />
+    <None Include="Resources\parti tagliate.txt" />
     <Content Include="Resources\test.html" />
   </ItemGroup>
 </Project>
