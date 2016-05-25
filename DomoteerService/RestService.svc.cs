@@ -18,7 +18,10 @@ namespace DomoteerService
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private String connectionString = @"Data Source=PC-FRA\SQLEXPRESS;Initial Catalog=DomoteerDatabase;Integrated Security=True";
+        //private String connectionString = @"Data Source=PC-FRA\SQLEXPRESS;Initial Catalog=DomoteerDatabase;Integrated Security=True";
+
+        private String connectionString = @"Data Source=FABRIZIO;Initial Catalog=Domoteer;Integrated Security=True";
+        
 
         string connStr = ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;
 
@@ -34,7 +37,7 @@ namespace DomoteerService
                 try
                 {
                     conn.Open();
-                    SqlCommand selectTemp = new SqlCommand("select * from Temperature order by t_timestamp", conn);
+                    SqlCommand selectTemp = new SqlCommand("select * from Temperature order by T_timestamp", conn);
                     SqlDataReader temperaturesReader = selectTemp.ExecuteReader();
 
                     if (temperaturesReader.HasRows)
@@ -70,15 +73,15 @@ namespace DomoteerService
 
         public String putTemperatures(String t, String date)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                conn.Open();
-                SqlCommand insert = new SqlCommand("insert into Temperature (timestamp,temperature) values( " + t + " , " + date + ");", conn);
-                insert.ExecuteNonQuery();
+            //using (SqlConnection conn = new SqlConnection(connectionString))
+            //{
+            //    conn.Open();
+            //    SqlCommand insert = new SqlCommand("insert into Temperature (timestamp,temperature) values( " + t + " , " + date + ");", conn);
+            //    insert.ExecuteNonQuery();
 
                 
 
-            }
+            //}
             return "put: " + t + " at: " + date;
         }
     }

@@ -74,10 +74,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\DomoteerDatabase.mdf" />
-    <Content Include="App_Data\DomoteerDatabase_log.ldf">
-      <DependentUpon>DomoteerDatabase.mdf</DependentUpon>
-    </Content>
     <Content Include="RestService.svc" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -111,6 +107,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -22,7 +22,7 @@ namespace DomoteerService
 
         [OperationContract]
         [WebInvoke(
-        Method = "PUT",
+        Method = "POST",
         ResponseFormat = WebMessageFormat.Xml,
         BodyStyle = WebMessageBodyStyle.Wrapped,
         UriTemplate = "putTemperatures/{t}/{date}")]

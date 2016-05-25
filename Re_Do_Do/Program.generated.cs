@@ -30,6 +30,9 @@ namespace Re_Do_Do {
         /// <summary>The Camera module using socket 3 of the mainboard.</summary>
         private Gadgeteer.Modules.GHIElectronics.Camera camera;
         
+        /// <summary>The Extender module (not connected).</summary>
+        private Gadgeteer.Modules.GHIElectronics.Extender extender;
+        
         /// <summary>This property provides access to the Mainboard API. This is normally not necessary for an end user program.</summary>
         protected new static GHIElectronics.Gadgeteer.FEZSpider Mainboard {
             get {
@@ -57,6 +60,7 @@ namespace Re_Do_Do {
             this.ethernetJ11D = new GTM.GHIElectronics.EthernetJ11D(7);
             this.usbClientDP = new GTM.GHIElectronics.USBClientDP(1);
             this.camera = new GTM.GHIElectronics.Camera(3);
+            Microsoft.SPOT.Debug.Print("The module \'extender\' was not connected in the designer and will be null.");
         }
     }
 }
