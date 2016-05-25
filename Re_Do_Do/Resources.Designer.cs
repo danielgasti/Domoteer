@@ -25,10 +25,6 @@ namespace Re_Do_Do
                 return Resources.manager;
             }
         }
-        internal static Microsoft.SPOT.Font GetFont(Resources.FontResources id)
-        {
-            return ((Microsoft.SPOT.Font)(Microsoft.SPOT.ResourceUtility.GetObject(ResourceManager, id)));
-        }
         internal static string GetString(Resources.StringResources id)
         {
             return ((string)(Microsoft.SPOT.ResourceUtility.GetObject(ResourceManager, id)));
@@ -36,15 +32,12 @@ namespace Re_Do_Do
         [System.SerializableAttribute()]
         internal enum StringResources : short
         {
-            style = -5605,
+            plots = -18961,
+            jquery_2_2_4_min = -5108,
             index = -2501,
-            parti_tagliate = 11042,
-        }
-        [System.SerializableAttribute()]
-        internal enum FontResources : short
-        {
-            small = 13070,
-            NinaB = 18060,
+            bootstrap_min1 = 19547,
+            bootstrap_min = 25952,
+            Chart_bundle_min = 30310,
         }
     }
 }

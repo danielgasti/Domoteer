@@ -70,9 +70,17 @@ namespace Re_Do_Do
             #region GESTIONE PAGINA WEB
             WebPageList = new Hashtable();
             HomePageData = new WebPage(Resources.GetString(Resources.StringResources.index), "index.htm", "text/html");
-            CssPageData = new WebPage(Resources.GetString(Resources.StringResources.style), "style.css", "text/css");
+            PlotsPageData = new WebPage(Resources.GetString(Resources.StringResources.plots), "plots.htm", "text/html");
+            CssPageData = new WebPage(Resources.GetString(Resources.StringResources.bootstrap_min), "bootstrap.min.css", "text/css");
+            JsElaboration = new WebPage(Resources.GetString(Resources.StringResources.jquery_2_2_4_min), "jquery-2.2.4.min.js", "text/javascript");
+            JsPlots = new WebPage(Resources.GetString(Resources.StringResources.Chart_bundle_min), "Chart.bundle.min.js", "text/javascript");
+            JsBootstrap = new WebPage(Resources.GetString(Resources.StringResources.bootstrap_min1), "bootstrap.min.js", "text/javascript");
             WebPageList.Add("index.htm", HomePageData);
-            WebPageList.Add("style.css", CssPageData);
+            WebPageList.Add("plots.htm", PlotsPageData);
+            WebPageList.Add("bootstrap.min.css", CssPageData);
+            WebPageList.Add("jquery-2.2.4.min.js", JsElaboration);
+            WebPageList.Add("Chart.bundle.min.js", JsPlots);
+            WebPageList.Add("bootstrap.min.js", JsBootstrap);
 
             foreach (string key in WebPageList.Keys)
             {
@@ -242,6 +250,14 @@ namespace Re_Do_Do
         public WebPage HomePageData { get; set; }
 
         public WebPage CssPageData { get; set; }
+
+        public WebPage JsElaboration { get; set; }
+
+        public WebPage JsPlots { get; set; }
+
+        public WebPage PlotsPageData { get; set; }
+
+        public WebPage JsBootstrap { get; set; }
     }
 
 

@@ -120,13 +120,23 @@
     <None Include="Program.gadgeteer.diagram">
       <DependentUpon>Program.gadgeteer</DependentUpon>
     </None>
-    <None Include="Resources\NinaB.tinyfnt" />
-    <None Include="Resources\small.tinyfnt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\plots.htm" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bootstrap.min.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bootstrap.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Chart.bundle.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\jquery-2.2.4.min.js" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\index.htm" />
-    <None Include="Resources\style.css" />
-    <None Include="Resources\parti tagliate.txt" />
-    <Content Include="Resources\test.html" />
   </ItemGroup>
 </Project>
