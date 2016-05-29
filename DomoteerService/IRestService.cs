@@ -14,10 +14,10 @@ namespace DomoteerService
     {
         [OperationContract]
         [WebInvoke(
-        Method = "GET",
+        Method = "POST",
         ResponseFormat = WebMessageFormat.Xml,
         BodyStyle = WebMessageBodyStyle.Wrapped,
-        UriTemplate = "getTemperatures/{n}")]
+        UriTemplate = "getTemperatures?n={n}")]
         List<Temperature> getTemperatures(String n);
 
         [OperationContract]
@@ -25,7 +25,7 @@ namespace DomoteerService
         Method = "POST",
         ResponseFormat = WebMessageFormat.Xml,
         BodyStyle = WebMessageBodyStyle.Wrapped,
-        UriTemplate = "putTemperatures/{t}/{date}")]
+        UriTemplate = "putTemperatures?temperature={t}&time={date}")]
         String putTemperatures(String t, String date);
 
     }

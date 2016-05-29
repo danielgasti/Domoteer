@@ -37,9 +37,9 @@ namespace Re_Do_Do
             eth.NetworkSettings.EnableDhcp();
             
             ///homegateway CICCIO
-            //eth.NetworkSettings.EnableStaticIP("192.168.0.222", "255.255.255.0", "192.168.0.1");
+            eth.NetworkSettings.EnableStaticIP("192.168.0.222", "255.255.255.0", "192.168.0.1");
             ///homegateway FABRI
-            eth.NetworkSettings.EnableStaticIP("192.168.1.222", "255.255.255.0", "192.168.1.254");
+            //eth.NetworkSettings.EnableStaticIP("192.168.1.222", "255.255.255.0", "192.168.1.254");
             
             //ListNetworkInterfaces();
 
@@ -258,6 +258,40 @@ namespace Re_Do_Do
         public WebPage PlotsPageData { get; set; }
 
         public WebPage JsBootstrap { get; set; }
+
+
+
+
+        public void GetTemperatures(string n)
+        {
+            // Create the form values
+            var formValues = "n=" + n;
+
+            
+            // Create GET content
+            var content = Gadgeteer.Networking.POSTContent.CreateTextBasedContent(formValues);
+            POSTContent emptyPost = new POSTContent();
+
+            // Create the request
+            var request = Gadgeteer.Networking.HttpHelper.CreateHttpPostRequest(
+                @"http://192.168.0.4:8034/DomoteerWS/RestService.svc/getTemperatures?n=" + n // the URL to post to
+                , emptyPost // the form values
+                , null // the mime type for an HTTP form
+            );
+
+            request.ResponseReceived += new HttpRequest.ResponseHandler(request_ResponseReceived);
+
+            // Post the form
+            request.SendRequest();
+        }
+
+        private void request_ResponseReceived(HttpRequest sender, HttpResponse response)
+        {
+            Debug.Print("Response received:\n");
+            Debug.Print("- response status = " + response.StatusCode);
+            Debug.Print("- response content =\n" + response.Text);
+        }
+
     }
 
 
@@ -274,7 +308,12 @@ namespace Re_Do_Do
             Url = _Url;
             MimeType = _MimeType;
         }
+
+        
+
     }
+
+    
 
 
 }

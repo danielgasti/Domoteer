@@ -21,6 +21,7 @@ namespace Re_Do_Do
         public partial class Program
         {
             DomoteerWebServer server;
+            private object GetTemperaturesWS;
 
             void ProgramStarted()
             {
@@ -28,6 +29,8 @@ namespace Re_Do_Do
                 server = new DomoteerWebServer(ethernetJ11D,multicolorLED,displayT35);
                 server.initConnection();
                 server.RunWebServer();
+                
+
                 #endregion
 
                 #region SENSORE TEMPERATURA
@@ -50,6 +53,14 @@ namespace Re_Do_Do
                 //this.camera.PictureCaptured += Picture_Captured;
                 #endregion
 
+                button.ButtonPressed += new GTM.GHIElectronics.Button.ButtonEventHandler(GetTemperatures);
+
+            }
+
+            private void GetTemperatures(GTM.GHIElectronics.Button sender, GTM.GHIElectronics.Button.ButtonState state)
+            {
+                Debug.Print("Button pressed");
+                server.GetTemperatures("4");
             }
 
             private void Picture_Captured(Camera sender, GT.Picture e)
@@ -62,6 +73,7 @@ namespace Re_Do_Do
             {
                 sender.TakePicture();
             }
+
         }
     }
 

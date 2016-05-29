@@ -18,9 +18,9 @@ namespace DomoteerService
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        //private String connectionString = @"Data Source=PC-FRA\SQLEXPRESS;Initial Catalog=DomoteerDatabase;Integrated Security=True";
+        private String connectionString = @"Data Source=PC-FRA\SQLEXPRESS;Initial Catalog=DomoteerDatabase;Integrated Security=True";
 
-        private String connectionString = @"Data Source=FABRIZIO;Initial Catalog=Domoteer;Integrated Security=True";
+        //private String connectionString = @"Data Source=FABRIZIO;Initial Catalog=Domoteer;Integrated Security=True";
         
 
         string connStr = ConfigurationManager.ConnectionStrings["connectionString"].ConnectionString;
