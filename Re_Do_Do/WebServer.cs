@@ -20,12 +20,16 @@ namespace Re_Do_Do
         DisplayT35 display;
         string ipAddress;
         private Hashtable WebPageList;
+        Sensore_Temperatura_43 temperatureSensor;
+
+        Stopwatch sw = new Stopwatch();
         
-        public DomoteerWebServer(EthernetJ11D eth, MulticolorLED led, DisplayT35 display) 
+        public DomoteerWebServer(EthernetJ11D eth, MulticolorLED led, DisplayT35 display, Sensore_Temperatura_43 s) 
         {
             this.eth = eth;
             this.led = led;
             this.display = display;
+            temperatureSensor = s;
         }
 
         /// <summary>
@@ -69,7 +73,7 @@ namespace Re_Do_Do
 
             #region GESTIONE PAGINA WEB
             WebPageList = new Hashtable();
-            HomePageData = new WebPage(Resources.GetString(Resources.StringResources.index), "index.htm", "text/html");
+            HomePageData = new WebPage(HtmlIndex.buildPage(), "index.htm", "text/html");
             PlotsPageData = new WebPage(Resources.GetString(Resources.StringResources.plots), "plots.htm", "text/html");
             CssPageData = new WebPage(Resources.GetString(Resources.StringResources.bootstrap_min), "bootstrap.min.css", "text/css");
             JsElaboration = new WebPage(Resources.GetString(Resources.StringResources.jquery_2_2_4_min), "jquery-2.2.4.min.js", "text/javascript");
@@ -154,13 +158,25 @@ namespace Re_Do_Do
         /// </summary>
         public void WebEventHandler(string path, WebServer.HttpMethod method, Responder responder)
         {
-            try
+             try
             {
                 WebPage PageData = (WebPage)WebPageList[path];
                 string content = PageData.Content;
 
                 if (PageData.Url.ToLower() == "index.htm")
                 {
+                    Temperatura t = temperatureSensor.getTemp();
+                    double temperatureValor = t.BinToCelsius();
+                    HtmlIndex.temperatura = temperatureValor.ToString();
+                    WebPageList.Remove("index.htm");
+                    HomePageData = new WebPage(HtmlIndex.buildPage(), "index.htm", "text/html");
+                    WebPageList.Add("index.htm", HomePageData);
+
+                    //TEMPI
+                    sw.Stop();
+                    Debug.Print("tempo impiegato: LETTURA SENSORE -> " + sw.Elapsed);
+                    sw.Start();
+
                     if (method == WebServer.HttpMethod.POST)
                     {
                         content = fixResponderText(responder);
@@ -196,8 +212,22 @@ namespace Re_Do_Do
                     }*/
                 }
 
+                //TEMPI
+                sw.Stop();
+                Debug.Print("tempo impiegato: FIX RESPONDER -> " + sw.Elapsed);
+                sw.Start();
                 byte[] data = Encoding.UTF8.GetBytes(content);
+
+                //TEMPI
+                sw.Stop();
+                Debug.Print("tempo impiegato: encoding -> " + sw.Elapsed);
+                sw.Start();
+
                 responder.Respond(data, PageData.MimeType);
+
+                //TEMPI
+                sw.Stop();
+                Debug.Print("tempo impiegato: RESPOND -> " + sw.Elapsed);
             }
             catch (Exception ex)
             {
@@ -313,7 +343,169 @@ namespace Re_Do_Do
 
     }
 
+
+
+    public static class HtmlIndex {
+        public static string temperatura { get; set; }
+        public static string gas { get; set; }
+        public static string passaggi { get; set; }
+
+        static string head = @"<!DOCTYPE html> 
+                        <html lang='en'>
+                        <head>
+                          <title>Domoteer</title>
+                            <meta charset='utf-8'>
+                            <meta name='viewport' content='width=device-width, initial-scale=1'>
+                            <link rel='stylesheet' href='bootstrap.min.css'>
+                            <script src='jquery-2.2.4.min.js'></script>
+                            <script src='bootstrap.min.js'></script>
+                            <script src='Chart.bundle.min.js'></script>
+                          
+                                <style>
+                                h1{text-align: center;}
+                                h3{text-align: center;}
+                                h5{text-align: center;}
+                                h6{
+	                                text-align: center;
+	                                color: #555;
+                                }
+
+                                .navbar-inverse .navbar-nav > li > a{
+	                                color: black;
+                                }
+
+                                .navbar-inverse{
+	                                background-color: hsla(230, 100%, 75%, 0.6);
+	                                border-color: hsla(230, 100%, 75%, 0.6);	
+                                }
+
+                                .azure{
+	                                background-color: hsl(200, 28%, 90%);
+	                                border-color: hsl(200, 28%, 90%);
+                                }
+
+                                .white{
+	                                background-color: white;
+	                                border-color: white;
+	                                height: 100%;
+                                }
+
+                                footer{
+	                                background-color: hsla(230, 100%, 75%, 0.6);
+	                                border-color: hsla(230, 100%, 75%, 0.6);
+	                                color: white;
+	                                padding: 15px;
+                                }
+
+                                .navbar {
+	                                margin-bottom: 0;
+	                                border-radius: 0;
+                                }
+
+                                .navbar-brand-domoteer{
+	                                float: left;
+                                    height: 50px;
+                                    padding: 1px 15px;
+                                    font-size: 18px;
+                                    line-height: 20px;
+                                }    
+   
+
+                           /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+                            .row.content {height: 450px}
     
+                            /* On small screens, set height to 'auto' for sidenav and grid */
+                            @media screen and (max-width: 767px) {
+                              .sidenav {
+                                height: auto;
+                                padding: 15px;
+                              }
+                              .row.content {height:auto;} 
+                            }
+                          </style>
+                        </head>";
+
+
+        static String[] body = new String[] {
+            @"<body>
+                <nav class='navbar navbar-inverse'>
+                  <div class='container-fluid'>
+                    <div class='navbar-header'>
+                      <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='#myNavbar'>
+                        <span class='icon-bar'></span>
+                        <span class='icon-bar'></span>
+                        <span class='icon-bar'></span>                        
+                      </button>
+                      <a class='navbar-brand-domoteer' href='#'>
+		                <img src='domoteer.ico'>
+	                  </a>
+                    </div>
+                    <div class='collapse navbar-collapse' id='myNavbar'>
+                      <ul class='nav navbar-nav'>
+                       <li><a class='head_bar' href='index.htm'>Home</a></li>
+                        <li><a class='head_bar' href='plots.htm'>Plots</a></li>
+                      </ul>
+                      <ul class='nav navbar-nav navbar-right'>
+                        <!--<li><a href='#'><span class='glyphicon glyphicon-log-in'></span> Login</a></li>-->
+                      </ul>
+                    </div>
+                  </div>
+                </nav>
+  
+                <div class='container-fluid text-center azure'>    
+                  <div class='row content'>
+                    <div class='col-sm-2'>
+                    </div>
+                    <div class='col-sm-8 text-left white'> 
+                      <h1>Welcome to Domoteer</h1>
+                      <h5>the domotic monitoring system</h5>
+                      <hr>
+		                <div class='row' >
+                            <div class='col-sm-4' id='temperature'>
+                                <h3>Rilevamento temperatura</h3>
+                                <br><br>
+                                <h1>",
+
+            //parte per la gestione del rilevamento gas
+            @"<h1>
+            </div>
+			<div class='col-sm-4'>
+				<h3>Rilevamento gas</h3>
+				<br><br>
+				<h1>",
+            
+            //parte per la gestione del rilevamento passaggi
+            @"<h1>
+			                </div>
+			                <div class='col-sm-4'>
+				                <h3>Rilevamento passaggi</h3>
+				                <br><br>
+				                <h1>",
+        
+            // 
+            @"<h1>
+			                </div>
+		                </div>
+                    </div>
+                    <div class='col-sm-2'>
+                    </div>
+                  </div>
+                </div>
+
+                <footer class='container-fluid text-center'>
+                <h6>Developers: Gastinelli Daniel, Oddera Fabrizio, Ventura Francesco 2016.</h6>
+                </footer>
+ 
+                </body>
+                </html>"
+        };
+
+        public static String buildPage(){
+            return head + body[0] + temperatura + body[1] + gas + body[2] + passaggi + body[3];
+        }
+
+    }
+
 
 
 }

@@ -53,6 +53,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Sensore_Temperatura_43.cs" />
+    <Compile Include="StopWatch.cs" />
     <Compile Include="Temperatura.cs" />
     <Compile Include="WebServer.cs" />
   </ItemGroup>

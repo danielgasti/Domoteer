@@ -25,25 +25,22 @@ namespace Re_Do_Do
 
             void ProgramStarted()
             {
-                #region SERVER
-                server = new DomoteerWebServer(ethernetJ11D,multicolorLED,displayT35);
-                server.initConnection();
-                server.RunWebServer();
-                
-
-                #endregion
-
                 #region SENSORE TEMPERATURA
                 Sensore_Temperatura_43 s = new Sensore_Temperatura_43();
                 s.setup();
                 Temperatura t = s.getTemp();
-                double valor = t.BinToCelsius();
+                double temperatureValor = t.BinToCelsius();
+                HtmlIndex.temperatura = temperatureValor.ToString();
                 #endregion
 
                 #region SENSORE GAS
+                double gasValor = 10;
+                HtmlIndex.gas = gasValor.ToString();
                 #endregion
 
                 #region SENSORE INFRAROSSI
+                double passValor = 10;
+                HtmlIndex.passaggi = passValor.ToString();
                 #endregion
 
                 #region CAMERA
@@ -53,6 +50,12 @@ namespace Re_Do_Do
                 //this.camera.PictureCaptured += Picture_Captured;
                 #endregion
 
+
+                #region SERVER
+                server = new DomoteerWebServer(ethernetJ11D, multicolorLED, displayT35, s);
+                server.initConnection();
+                server.RunWebServer();
+                #endregion
                 button.ButtonPressed += new GTM.GHIElectronics.Button.ButtonEventHandler(GetTemperatures);
 
             }
