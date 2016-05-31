@@ -10,7 +10,7 @@ namespace DomoteerService
     public class Temperature
     {
         [DataMember]
-        public Double temperature {get; set;}
+        public String temperature {get; set;}
         [DataMember]
         public String timestamp {get; set;}
 

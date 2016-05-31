@@ -309,13 +309,43 @@ namespace Re_Do_Do
                 , null // the mime type for an HTTP form
             );
 
-            request.ResponseReceived += new HttpRequest.ResponseHandler(request_ResponseReceived);
+            request.ResponseReceived += new HttpRequest.ResponseHandler(GetTemperatures_ResponseReceived);
 
             // Post the form
             request.SendRequest();
         }
 
-        private void request_ResponseReceived(HttpRequest sender, HttpResponse response)
+        private void GetTemperatures_ResponseReceived(HttpRequest sender, HttpResponse response)
+        {
+            Debug.Print("Response received:\n");
+            Debug.Print("- response status = " + response.StatusCode);
+            Debug.Print("- response content =\n" + response.Text);
+        }
+
+        public void PutTemperatures(string t, string date)
+        {
+            // Create the form values
+            var formValues = "temperature=" + t + "&date=" + date;
+
+
+            // Create GET content
+            //var content = Gadgeteer.Networking.POSTContent.CreateTextBasedContent(formValues);
+            POSTContent emptyPost = new POSTContent();
+
+            // Create the request
+            var request = Gadgeteer.Networking.HttpHelper.CreateHttpPostRequest(
+                @"http://192.168.0.4:8034/DomoteerWS/RestService.svc/putTemperatures?" + formValues // the URL to post to
+                , emptyPost // the form values
+                , null // the mime type for an HTTP form
+            );
+
+            request.ResponseReceived += new HttpRequest.ResponseHandler(PutTemperatures_ResponseReceived);
+
+            // Post the form
+            request.SendRequest();
+        }
+
+        private void PutTemperatures_ResponseReceived(HttpRequest sender, HttpResponse response)
         {
             Debug.Print("Response received:\n");
             Debug.Print("- response status = " + response.StatusCode);
@@ -323,6 +353,8 @@ namespace Re_Do_Do
         }
 
     }
+
+
 
 
 

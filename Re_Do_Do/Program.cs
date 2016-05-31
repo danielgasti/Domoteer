@@ -20,13 +20,15 @@ namespace Re_Do_Do
 {
         public partial class Program
         {
+
+            Sensore_Temperatura_43 s;
             DomoteerWebServer server;
             private object GetTemperaturesWS;
 
             void ProgramStarted()
             {
                 #region SENSORE TEMPERATURA
-                Sensore_Temperatura_43 s = new Sensore_Temperatura_43();
+                s = new Sensore_Temperatura_43();
                 s.setup();
                 Temperatura t = s.getTemp();
                 double temperatureValor = t.BinToCelsius();
@@ -62,9 +64,20 @@ namespace Re_Do_Do
 
             private void GetTemperatures(GTM.GHIElectronics.Button sender, GTM.GHIElectronics.Button.ButtonState state)
             {
+                displayT35.BacklightEnabled = true;
+
+
                 Debug.Print("Button pressed");
+                Temperatura t = s.getTemp();
+                DateTime startDate = DateTime.Now;
+
+
                 server.GetTemperatures("4");
+                Debug.Print("Sending: " + t.BinToCelsius().ToString() + " - " + startDate.ToString("yyyyMMddHHmmss"));
+                server.PutTemperatures(t.BinToCelsius().ToString(), startDate.ToString("yyyyMMddHHmmss"));
             }
+
+
 
             private void Picture_Captured(Camera sender, GT.Picture e)
             {
@@ -76,6 +89,24 @@ namespace Re_Do_Do
             {
                 sender.TakePicture();
             }
+
+
+
+
+            Font baseFont;
+            Window window;
+            Canvas canvas = new Canvas();
+            Text txtMsg;
+
+            private void setupWindow()
+            {
+                baseFont = Resources.GetFont(Resources.FontResources.NinaB);
+                window = displayT35.WPFWindow;
+                window.Child = canvas;
+                txtMsg = new Text(baseFont, "Starting…");
+                canvas.Children.Add(txtMsg);
+            }
+
 
         }
     }
