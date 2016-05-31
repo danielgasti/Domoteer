@@ -27,22 +27,19 @@ namespace Re_Do_Do
 
             void ProgramStarted()
             {
+                
+
                 #region SENSORE TEMPERATURA
                 s = new Sensore_Temperatura_43();
                 s.setup();
                 Temperatura t = s.getTemp();
-                double temperatureValor = t.BinToCelsius();
-                HtmlIndex.temperatura = temperatureValor.ToString();
+                double valor = t.BinToCelsius();
                 #endregion
 
                 #region SENSORE GAS
-                double gasValor = 10;
-                HtmlIndex.gas = gasValor.ToString();
                 #endregion
 
                 #region SENSORE INFRAROSSI
-                double passValor = 10;
-                HtmlIndex.passaggi = passValor.ToString();
                 #endregion
 
                 #region CAMERA
@@ -52,19 +49,20 @@ namespace Re_Do_Do
                 //this.camera.PictureCaptured += Picture_Captured;
                 #endregion
 
-
                 #region SERVER
                 server = new DomoteerWebServer(ethernetJ11D, multicolorLED, displayT35, s);
                 server.initConnection();
                 server.RunWebServer();
+
+
                 #endregion
+
                 button.ButtonPressed += new GTM.GHIElectronics.Button.ButtonEventHandler(GetTemperatures);
 
             }
 
             private void GetTemperatures(GTM.GHIElectronics.Button sender, GTM.GHIElectronics.Button.ButtonState state)
             {
-                displayT35.BacklightEnabled = true;
 
 
                 Debug.Print("Button pressed");
@@ -88,23 +86,6 @@ namespace Re_Do_Do
             private void Camera_Connected(Camera sender, EventArgs e)
             {
                 sender.TakePicture();
-            }
-
-
-
-
-            Font baseFont;
-            Window window;
-            Canvas canvas = new Canvas();
-            Text txtMsg;
-
-            private void setupWindow()
-            {
-                baseFont = Resources.GetFont(Resources.FontResources.NinaB);
-                window = displayT35.WPFWindow;
-                window.Child = canvas;
-                txtMsg = new Text(baseFont, "Starting…");
-                canvas.Children.Add(txtMsg);
             }
 
 
