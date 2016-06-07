@@ -28,28 +28,24 @@ namespace DomoteerService
         UriTemplate = "putTemperatures?temperature={t}&date={date}")]
         String putTemperatures(String t, String date);
 
+        [OperationContract]
+        [WebInvoke(
+        Method = "POST",
+        ResponseFormat = WebMessageFormat.Json,
+        BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "getGas?n={n}")]
+        List<Gas> getGas(String n);
+
+        [OperationContract]
+        [WebInvoke(
+        Method = "POST",
+        ResponseFormat = WebMessageFormat.Json,
+        BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "putGas?lgp={lgp}&co={co}&smoke={smoke}&date={date}")]
+        String putGas(String lgp, String co, String smoke, String date);
+
     }
 
 
-    // Per aggiungere tipi compositi alle operazioni del servizio utilizzare un contratto di dati come descritto nell'esempio seguente.
-    [DataContract]
-    public class CompositeType
-    {
-        bool boolValue = true;
-        string stringValue = "Hello ";
 
-        [DataMember]
-        public bool BoolValue
-        {
-            get { return boolValue; }
-            set { boolValue = value; }
-        }
-
-        [DataMember]
-        public string StringValue
-        {
-            get { return stringValue; }
-            set { stringValue = value; }
-        }
-    }
 }

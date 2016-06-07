@@ -22,6 +22,8 @@ namespace Re_Do_Do
         private Hashtable WebPageList;
         Sensore_Temperatura_43 temperatureSensor;
 
+        private string IPAddress = "http://192.168.0.8/Domoteer/";
+
         Stopwatch sw = new Stopwatch();
         
         public DomoteerWebServer(EthernetJ11D eth, MulticolorLED led, DisplayT35 display, Sensore_Temperatura_43 s) 
@@ -71,26 +73,26 @@ namespace Re_Do_Do
             WebServer.StartLocalServer(eth.NetworkSettings.IPAddress, 80);
             WebServer.DefaultEvent.WebEventReceived += DefaultEvent_WebEventReceived;
 
-            #region GESTIONE PAGINA WEB
-            WebPageList = new Hashtable();
-            HomePageData = new WebPage(HtmlIndex.buildPage(), "index.htm", "text/html");
-            PlotsPageData = new WebPage(Resources.GetString(Resources.StringResources.plots), "plots.htm", "text/html");
-            CssPageData = new WebPage(Resources.GetString(Resources.StringResources.bootstrap_min), "bootstrap.min.css", "text/css");
-            JsElaboration = new WebPage(Resources.GetString(Resources.StringResources.jquery_2_2_4_min), "jquery-2.2.4.min.js", "text/javascript");
-            JsPlots = new WebPage(Resources.GetString(Resources.StringResources.Chart_bundle_min), "Chart.bundle.min.js", "text/javascript");
-            JsBootstrap = new WebPage(Resources.GetString(Resources.StringResources.bootstrap_min1), "bootstrap.min.js", "text/javascript");
-            WebPageList.Add("index.htm", HomePageData);
-            WebPageList.Add("plots.htm", PlotsPageData);
-            WebPageList.Add("bootstrap.min.css", CssPageData);
-            WebPageList.Add("jquery-2.2.4.min.js", JsElaboration);
-            WebPageList.Add("Chart.bundle.min.js", JsPlots);
-            WebPageList.Add("bootstrap.min.js", JsBootstrap);
+            //#region GESTIONE PAGINA WEB
+            //WebPageList = new Hashtable();
+            //HomePageData = new WebPage(HtmlIndex.buildPage(), "index.htm", "text/html");
+            //PlotsPageData = new WebPage(Resources.GetString(Resources.StringResources.plots), "plots.htm", "text/html");
+            //CssPageData = new WebPage(Resources.GetString(Resources.StringResources.bootstrap_min), "bootstrap.min.css", "text/css");
+            //JsElaboration = new WebPage(Resources.GetString(Resources.StringResources.jquery_2_2_4_min), "jquery-2.2.4.min.js", "text/javascript");
+            //JsPlots = new WebPage(Resources.GetString(Resources.StringResources.Chart_bundle_min), "Chart.bundle.min.js", "text/javascript");
+            //JsBootstrap = new WebPage(Resources.GetString(Resources.StringResources.bootstrap_min1), "bootstrap.min.js", "text/javascript");
+            //WebPageList.Add("index.htm", HomePageData);
+            //WebPageList.Add("plots.htm", PlotsPageData);
+            //WebPageList.Add("bootstrap.min.css", CssPageData);
+            //WebPageList.Add("jquery-2.2.4.min.js", JsElaboration);
+            //WebPageList.Add("Chart.bundle.min.js", JsPlots);
+            //WebPageList.Add("bootstrap.min.js", JsBootstrap);
 
-            foreach (string key in WebPageList.Keys)
-            {
-                WebServer.SetupWebEvent(key).WebEventReceived += new WebEvent.ReceivedWebEventHandler(WebEventHandler);
-            }
-            #endregion
+            //foreach (string key in WebPageList.Keys)
+            //{
+            //    WebServer.SetupWebEvent(key).WebEventReceived += new WebEvent.ReceivedWebEventHandler(WebEventHandler);
+            //}
+            //#endregion
 
 
             while (true)
@@ -156,84 +158,84 @@ namespace Re_Do_Do
         /// handler per l'accesso alla pagina "index.htm"
         /// la parte commentata corrisponde alla gestione delle richieste di tipo GET
         /// </summary>
-        public void WebEventHandler(string path, WebServer.HttpMethod method, Responder responder)
-        {
-             try
-            {
-                WebPage PageData = (WebPage)WebPageList[path];
-                string content = PageData.Content;
+        //public void WebEventHandler(string path, WebServer.HttpMethod method, Responder responder)
+        //{
+        //     try
+        //    {
+        //        WebPage PageData = (WebPage)WebPageList[path];
+        //        string content = PageData.Content;
 
-                if (PageData.Url.ToLower() == "index.htm")
-                {
-                    Temperatura t = temperatureSensor.getTemp();
-                    double temperatureValor = t.BinToCelsius();
-                    HtmlIndex.temperatura = temperatureValor.ToString();
-                    WebPageList.Remove("index.htm");
-                    HomePageData = new WebPage(HtmlIndex.buildPage(), "index.htm", "text/html");
-                    WebPageList.Add("index.htm", HomePageData);
+        //        if (PageData.Url.ToLower() == "index.htm")
+        //        {
+        //            Temperatura t = temperatureSensor.getTemp();
+        //            double temperatureValor = t.BinToCelsius();
+        //            HtmlIndex.temperatura = temperatureValor.ToString();
+        //            WebPageList.Remove("index.htm");
+        //            HomePageData = new WebPage(HtmlIndex.buildPage(), "index.htm", "text/html");
+        //            WebPageList.Add("index.htm", HomePageData);
 
-                    //TEMPI
-                    sw.Stop();
-                    Debug.Print("tempo impiegato: LETTURA SENSORE -> " + sw.Elapsed);
-                    sw.Start();
+        //            //TEMPI
+        //            sw.Stop();
+        //            Debug.Print("tempo impiegato: LETTURA SENSORE -> " + sw.Elapsed);
+        //            sw.Start();
 
-                    if (method == WebServer.HttpMethod.POST)
-                    {
-                        content = fixResponderText(responder);
-                        if (content == null)
-                        {
-                            content = "responder.Body.Text is null, cannot be fixed";
-                        }
-                    }
-                    /*else if (method == WebServer.HttpMethod.GET)
-                    {
-                        if ((netData != null) && (systemData != null))
-                        {
-                            //replace placeholder text vertical bar in web page with the run-time text
-                            //regular expressions are much too slow, use split function instead
-                            string[] parts = content.Split(new char[] { '|' });
-                            if (parts.Length == 9)
-                            {
-                                content = parts[0] + netData.MacAddress.ToHex()
-                                        + parts[1] + netData.StaticIP
-                                        + parts[2] + netData.NetMask
-                                        + parts[3] + netData.GatewayAddress
-                                        + parts[4] + netData.CloudIP
-                                        + parts[5] + systemData.ModelNumber
-                                        + parts[6] + systemData.SerialNumber
-                                        + parts[7] + systemData.DeviceHiveId.ToString()
-                                        + parts[8];
-                            }
-                        }
-                        else
-                        {
-                            content = "memory cannot be read";
-                        }
-                    }*/
-                }
+        //            if (method == WebServer.HttpMethod.POST)
+        //            {
+        //                content = fixResponderText(responder);
+        //                if (content == null)
+        //                {
+        //                    content = "responder.Body.Text is null, cannot be fixed";
+        //                }
+        //            }
+        //            /*else if (method == WebServer.HttpMethod.GET)
+        //            {
+        //                if ((netData != null) && (systemData != null))
+        //                {
+        //                    //replace placeholder text vertical bar in web page with the run-time text
+        //                    //regular expressions are much too slow, use split function instead
+        //                    string[] parts = content.Split(new char[] { '|' });
+        //                    if (parts.Length == 9)
+        //                    {
+        //                        content = parts[0] + netData.MacAddress.ToHex()
+        //                                + parts[1] + netData.StaticIP
+        //                                + parts[2] + netData.NetMask
+        //                                + parts[3] + netData.GatewayAddress
+        //                                + parts[4] + netData.CloudIP
+        //                                + parts[5] + systemData.ModelNumber
+        //                                + parts[6] + systemData.SerialNumber
+        //                                + parts[7] + systemData.DeviceHiveId.ToString()
+        //                                + parts[8];
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    content = "memory cannot be read";
+        //                }
+        //            }*/
+        //        }
 
-                //TEMPI
-                sw.Stop();
-                Debug.Print("tempo impiegato: FIX RESPONDER -> " + sw.Elapsed);
-                sw.Start();
-                byte[] data = Encoding.UTF8.GetBytes(content);
+        //        //TEMPI
+        //        sw.Stop();
+        //        Debug.Print("tempo impiegato: FIX RESPONDER -> " + sw.Elapsed);
+        //        sw.Start();
+        //        byte[] data = Encoding.UTF8.GetBytes(content);
 
-                //TEMPI
-                sw.Stop();
-                Debug.Print("tempo impiegato: encoding -> " + sw.Elapsed);
-                sw.Start();
+        //        //TEMPI
+        //        sw.Stop();
+        //        Debug.Print("tempo impiegato: encoding -> " + sw.Elapsed);
+        //        sw.Start();
 
-                responder.Respond(data, PageData.MimeType);
+        //        responder.Respond(data, PageData.MimeType);
 
-                //TEMPI
-                sw.Stop();
-                Debug.Print("tempo impiegato: RESPOND -> " + sw.Elapsed);
-            }
-            catch (Exception ex)
-            {
-                Debug.Print("WebEventReceived(): " + ex.ToString());
-            }
-        }
+        //        //TEMPI
+        //        sw.Stop();
+        //        Debug.Print("tempo impiegato: RESPOND -> " + sw.Elapsed);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Debug.Print("WebEventReceived(): " + ex.ToString());
+        //    }
+        //}
 
         /// <summary>
         /// gestione del responder.Body.Text (che può essere null)
@@ -304,7 +306,7 @@ namespace Re_Do_Do
 
             // Create the request
             var request = Gadgeteer.Networking.HttpHelper.CreateHttpPostRequest(
-                @"http://192.168.0.4:8034/DomoteerWS/RestService.svc/getTemperatures?n=" + n // the URL to post to
+                IPAddress + @"RestService.svc/getTemperatures?n=" + n // the URL to post to
                 , emptyPost // the form values
                 , null // the mime type for an HTTP form
             );
@@ -334,7 +336,7 @@ namespace Re_Do_Do
 
             // Create the request
             var request = Gadgeteer.Networking.HttpHelper.CreateHttpPostRequest(
-                @"http://192.168.0.4:8034/DomoteerWS/RestService.svc/putTemperatures?" + formValues // the URL to post to
+                IPAddress + @"RestService.svc/putTemperatures?" + formValues // the URL to post to
                 , emptyPost // the form values
                 , null // the mime type for an HTTP form
             );
@@ -346,6 +348,66 @@ namespace Re_Do_Do
         }
 
         private void PutTemperatures_ResponseReceived(HttpRequest sender, HttpResponse response)
+        {
+            Debug.Print("Response received:\n");
+            Debug.Print("- response status = " + response.StatusCode);
+            Debug.Print("- response content =\n" + response.Text);
+        }
+
+        public void GetGas(string n)
+        {
+            // Create the form values
+            var formValues = "n=" + n;
+
+
+            // Create GET content
+            var content = Gadgeteer.Networking.POSTContent.CreateTextBasedContent(formValues);
+            POSTContent emptyPost = new POSTContent();
+
+            // Create the request
+            var request = Gadgeteer.Networking.HttpHelper.CreateHttpPostRequest(
+                IPAddress + @"RestService.svc/getGas?n=" + n // the URL to post to
+                , emptyPost // the form values
+                , null // the mime type for an HTTP form
+            );
+
+            request.ResponseReceived += new HttpRequest.ResponseHandler(GetGas_ResponseReceived);
+
+            // Post the form
+            request.SendRequest();
+        }
+
+        private void GetGas_ResponseReceived(HttpRequest sender, HttpResponse response)
+        {
+            Debug.Print("Response received:\n");
+            Debug.Print("- response status = " + response.StatusCode);
+            Debug.Print("- response content =\n" + response.Text);
+        }
+
+        public void PutGas(String lgp, String co, String smoke, String date)
+        {
+            // Create the form values
+            var formValues = "lgp=" + lgp + "&co=" + co + "&smoke" + smoke + "&date=" + date;
+
+
+            // Create GET content
+            //var content = Gadgeteer.Networking.POSTContent.CreateTextBasedContent(formValues);
+            POSTContent emptyPost = new POSTContent();
+
+            // Create the request
+            var request = Gadgeteer.Networking.HttpHelper.CreateHttpPostRequest(
+                IPAddress + @"RestService.svc/putGas?" + formValues // the URL to post to
+                , emptyPost // the form values
+                , null // the mime type for an HTTP form
+            );
+
+            request.ResponseReceived += new HttpRequest.ResponseHandler(PutGas_ResponseReceived);
+
+            // Post the form
+            request.SendRequest();
+        }
+
+        private void PutGas_ResponseReceived(HttpRequest sender, HttpResponse response)
         {
             Debug.Print("Response received:\n");
             Debug.Print("- response status = " + response.StatusCode);
@@ -377,166 +439,166 @@ namespace Re_Do_Do
 
 
 
-    public static class HtmlIndex {
-        public static string temperatura { get; set; }
-        public static string gas { get; set; }
-        public static string passaggi { get; set; }
+//    public static class HtmlIndex {
+//        public static string temperatura { get; set; }
+//        public static string gas { get; set; }
+//        public static string passaggi { get; set; }
 
-        static string head = @"<!DOCTYPE html> 
-                        <html lang='en'>
-                        <head>
-                          <title>Domoteer</title>
-                            <meta charset='utf-8'>
-                            <meta name='viewport' content='width=device-width, initial-scale=1'>
-                            <link rel='stylesheet' href='bootstrap.min.css'>
-                            <script src='jquery-2.2.4.min.js'></script>
-                            <script src='bootstrap.min.js'></script>
-                            <script src='Chart.bundle.min.js'></script>
-                          
-                                <style>
-                                h1{text-align: center;}
-                                h3{text-align: center;}
-                                h5{text-align: center;}
-                                h6{
-	                                text-align: center;
-	                                color: #555;
-                                }
+//        static string head = @"<!DOCTYPE html> 
+//                        <html lang='en'>
+//                        <head>
+//                          <title>Domoteer</title>
+//                            <meta charset='utf-8'>
+//                            <meta name='viewport' content='width=device-width, initial-scale=1'>
+//                            <link rel='stylesheet' href='bootstrap.min.css'>
+//                            <script src='jquery-2.2.4.min.js'></script>
+//                            <script src='bootstrap.min.js'></script>
+//                            <script src='Chart.bundle.min.js'></script>
+//                          
+//                                <style>
+//                                h1{text-align: center;}
+//                                h3{text-align: center;}
+//                                h5{text-align: center;}
+//                                h6{
+//	                                text-align: center;
+//	                                color: #555;
+//                                }
+//
+//                                .navbar-inverse .navbar-nav > li > a{
+//	                                color: black;
+//                                }
+//
+//                                .navbar-inverse{
+//	                                background-color: hsla(230, 100%, 75%, 0.6);
+//	                                border-color: hsla(230, 100%, 75%, 0.6);	
+//                                }
+//
+//                                .azure{
+//	                                background-color: hsl(200, 28%, 90%);
+//	                                border-color: hsl(200, 28%, 90%);
+//                                }
+//
+//                                .white{
+//	                                background-color: white;
+//	                                border-color: white;
+//	                                height: 100%;
+//                                }
+//
+//                                footer{
+//	                                background-color: hsla(230, 100%, 75%, 0.6);
+//	                                border-color: hsla(230, 100%, 75%, 0.6);
+//	                                color: white;
+//	                                padding: 15px;
+//                                }
+//
+//                                .navbar {
+//	                                margin-bottom: 0;
+//	                                border-radius: 0;
+//                                }
+//
+//                                .navbar-brand-domoteer{
+//	                                float: left;
+//                                    height: 50px;
+//                                    padding: 1px 15px;
+//                                    font-size: 18px;
+//                                    line-height: 20px;
+//                                }    
+//   
+//
+//                           /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+//                            .row.content {height: 450px}
+//    
+//                            /* On small screens, set height to 'auto' for sidenav and grid */
+//                            @media screen and (max-width: 767px) {
+//                              .sidenav {
+//                                height: auto;
+//                                padding: 15px;
+//                              }
+//                              .row.content {height:auto;} 
+//                            }
+//                          </style>
+//                        </head>";
 
-                                .navbar-inverse .navbar-nav > li > a{
-	                                color: black;
-                                }
 
-                                .navbar-inverse{
-	                                background-color: hsla(230, 100%, 75%, 0.6);
-	                                border-color: hsla(230, 100%, 75%, 0.6);	
-                                }
+//        static String[] body = new String[] {
+//            @"<body>
+//                <nav class='navbar navbar-inverse'>
+//                  <div class='container-fluid'>
+//                    <div class='navbar-header'>
+//                      <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='#myNavbar'>
+//                        <span class='icon-bar'></span>
+//                        <span class='icon-bar'></span>
+//                        <span class='icon-bar'></span>                        
+//                      </button>
+//                      <a class='navbar-brand-domoteer' href='#'>
+//		                <img src='domoteer.ico'>
+//	                  </a>
+//                    </div>
+//                    <div class='collapse navbar-collapse' id='myNavbar'>
+//                      <ul class='nav navbar-nav'>
+//                       <li><a class='head_bar' href='index.htm'>Home</a></li>
+//                        <li><a class='head_bar' href='plots.htm'>Plots</a></li>
+//                      </ul>
+//                      <ul class='nav navbar-nav navbar-right'>
+//                        <!--<li><a href='#'><span class='glyphicon glyphicon-log-in'></span> Login</a></li>-->
+//                      </ul>
+//                    </div>
+//                  </div>
+//                </nav>
+//  
+//                <div class='container-fluid text-center azure'>    
+//                  <div class='row content'>
+//                    <div class='col-sm-2'>
+//                    </div>
+//                    <div class='col-sm-8 text-left white'> 
+//                      <h1>Welcome to Domoteer</h1>
+//                      <h5>the domotic monitoring system</h5>
+//                      <hr>
+//		                <div class='row' >
+//                            <div class='col-sm-4' id='temperature'>
+//                                <h3>Rilevamento temperatura</h3>
+//                                <br><br>
+//                                <h1>",
 
-                                .azure{
-	                                background-color: hsl(200, 28%, 90%);
-	                                border-color: hsl(200, 28%, 90%);
-                                }
-
-                                .white{
-	                                background-color: white;
-	                                border-color: white;
-	                                height: 100%;
-                                }
-
-                                footer{
-	                                background-color: hsla(230, 100%, 75%, 0.6);
-	                                border-color: hsla(230, 100%, 75%, 0.6);
-	                                color: white;
-	                                padding: 15px;
-                                }
-
-                                .navbar {
-	                                margin-bottom: 0;
-	                                border-radius: 0;
-                                }
-
-                                .navbar-brand-domoteer{
-	                                float: left;
-                                    height: 50px;
-                                    padding: 1px 15px;
-                                    font-size: 18px;
-                                    line-height: 20px;
-                                }    
-   
-
-                           /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-                            .row.content {height: 450px}
-    
-                            /* On small screens, set height to 'auto' for sidenav and grid */
-                            @media screen and (max-width: 767px) {
-                              .sidenav {
-                                height: auto;
-                                padding: 15px;
-                              }
-                              .row.content {height:auto;} 
-                            }
-                          </style>
-                        </head>";
-
-
-        static String[] body = new String[] {
-            @"<body>
-                <nav class='navbar navbar-inverse'>
-                  <div class='container-fluid'>
-                    <div class='navbar-header'>
-                      <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='#myNavbar'>
-                        <span class='icon-bar'></span>
-                        <span class='icon-bar'></span>
-                        <span class='icon-bar'></span>                        
-                      </button>
-                      <a class='navbar-brand-domoteer' href='#'>
-		                <img src='domoteer.ico'>
-	                  </a>
-                    </div>
-                    <div class='collapse navbar-collapse' id='myNavbar'>
-                      <ul class='nav navbar-nav'>
-                       <li><a class='head_bar' href='index.htm'>Home</a></li>
-                        <li><a class='head_bar' href='plots.htm'>Plots</a></li>
-                      </ul>
-                      <ul class='nav navbar-nav navbar-right'>
-                        <!--<li><a href='#'><span class='glyphicon glyphicon-log-in'></span> Login</a></li>-->
-                      </ul>
-                    </div>
-                  </div>
-                </nav>
-  
-                <div class='container-fluid text-center azure'>    
-                  <div class='row content'>
-                    <div class='col-sm-2'>
-                    </div>
-                    <div class='col-sm-8 text-left white'> 
-                      <h1>Welcome to Domoteer</h1>
-                      <h5>the domotic monitoring system</h5>
-                      <hr>
-		                <div class='row' >
-                            <div class='col-sm-4' id='temperature'>
-                                <h3>Rilevamento temperatura</h3>
-                                <br><br>
-                                <h1>",
-
-            //parte per la gestione del rilevamento gas
-            @"<h1>
-            </div>
-			<div class='col-sm-4'>
-				<h3>Rilevamento gas</h3>
-				<br><br>
-				<h1>",
+//            //parte per la gestione del rilevamento gas
+//            @"<h1>
+//            </div>
+//			<div class='col-sm-4'>
+//				<h3>Rilevamento gas</h3>
+//				<br><br>
+//				<h1>",
             
-            //parte per la gestione del rilevamento passaggi
-            @"<h1>
-			                </div>
-			                <div class='col-sm-4'>
-				                <h3>Rilevamento passaggi</h3>
-				                <br><br>
-				                <h1>",
+//            //parte per la gestione del rilevamento passaggi
+//            @"<h1>
+//			                </div>
+//			                <div class='col-sm-4'>
+//				                <h3>Rilevamento passaggi</h3>
+//				                <br><br>
+//				                <h1>",
         
-            // 
-            @"<h1>
-			                </div>
-		                </div>
-                    </div>
-                    <div class='col-sm-2'>
-                    </div>
-                  </div>
-                </div>
+//            // 
+//            @"<h1>
+//			                </div>
+//		                </div>
+//                    </div>
+//                    <div class='col-sm-2'>
+//                    </div>
+//                  </div>
+//                </div>
+//
+//                <footer class='container-fluid text-center'>
+//                <h6>Developers: Gastinelli Daniel, Oddera Fabrizio, Ventura Francesco 2016.</h6>
+//                </footer>
+// 
+//                </body>
+//                </html>"
+//        };
 
-                <footer class='container-fluid text-center'>
-                <h6>Developers: Gastinelli Daniel, Oddera Fabrizio, Ventura Francesco 2016.</h6>
-                </footer>
- 
-                </body>
-                </html>"
-        };
+//        public static String buildPage(){
+//            return head + body[0] + temperatura + body[1] + gas + body[2] + passaggi + body[3];
+//        }
 
-        public static String buildPage(){
-            return head + body[0] + temperatura + body[1] + gas + body[2] + passaggi + body[3];
-        }
-
-    }
+//    }
 
 
 

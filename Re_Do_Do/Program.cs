@@ -24,6 +24,7 @@ namespace Re_Do_Do
             Sensore_Temperatura_43 s;
             DomoteerWebServer server;
             private object GetTemperaturesWS;
+            Gas_Sensor sens;
 
             void ProgramStarted()
             {
@@ -57,18 +58,18 @@ namespace Re_Do_Do
 
                 #endregion
 
-                Gas_Sensor sens = new Gas_Sensor(extender);
+                sens = new Gas_Sensor(extender);
 
-                while (true)
-                {
-                    double val = sens.MQGetGasPercentage(sens.MQRead() / sens.R0, gas_type.LPG);
-                    Debug.Print("Gpl: " + val);
-                    val = sens.MQGetGasPercentage(sens.MQRead() / sens.R0, gas_type.CO);
-                    Debug.Print("CO: " + val);
-                    val = sens.MQGetGasPercentage(sens.MQRead() / sens.R0, gas_type.SMOKE);
-                    Debug.Print("Smoke: " + val);
-                    Thread.Sleep(1000);
-                }
+                //while (true)
+                //{
+                //    double val = sens.MQGetGasPercentage(sens.MQRead() / sens.R0, gas_type.LPG);
+                //    Debug.Print("Gpl: " + val);
+                //    val = sens.MQGetGasPercentage(sens.MQRead() / sens.R0, gas_type.CO);
+                //    Debug.Print("CO: " + val);
+                //    val = sens.MQGetGasPercentage(sens.MQRead() / sens.R0, gas_type.SMOKE);
+                //    Debug.Print("Smoke: " + val);
+                //    Thread.Sleep(1000);
+                //}
                 
                 
 
@@ -86,9 +87,19 @@ namespace Re_Do_Do
                 DateTime startDate = DateTime.Now;
 
 
-                server.GetTemperatures("4");
-                Debug.Print("Sending: " + t.BinToCelsius().ToString() + " - " + startDate.ToString("yyyyMMddHHmmss"));
-                server.PutTemperatures(t.BinToCelsius().ToString(), startDate.ToString("yyyyMMddHHmmss"));
+                //server.GetTemperatures("4");
+                //Debug.Print("Sending: " + t.BinToCelsius().ToString() + " - " + startDate.ToString("yyyyMMddHHmmss"));
+                //server.PutTemperatures(t.BinToCelsius().ToString(), startDate.ToString("yyyyMMddHHmmss"));
+
+                double lpg = sens.MQGetGasPercentage(sens.MQRead() / sens.R0, gas_type.LPG);
+                Debug.Print("Gpl: " + lpg);
+                double co = sens.MQGetGasPercentage(sens.MQRead() / sens.R0, gas_type.CO);
+                Debug.Print("CO: " + co);
+                double smoke = sens.MQGetGasPercentage(sens.MQRead() / sens.R0, gas_type.SMOKE);
+                Debug.Print("Smoke: " + smoke);
+
+
+                server.PutGas(lpg.ToString(), co.ToString(), smoke.ToString(), startDate.ToString("yyyyMMddHHmmss"));
             }
 
 
