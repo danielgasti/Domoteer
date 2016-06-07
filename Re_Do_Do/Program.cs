@@ -57,6 +57,22 @@ namespace Re_Do_Do
 
                 #endregion
 
+                Gas_Sensor sens = new Gas_Sensor(extender);
+
+                while (true)
+                {
+                    double val = sens.MQGetGasPercentage(sens.MQRead() / sens.R0, gas_type.LPG);
+                    Debug.Print("Gpl: " + val);
+                    val = sens.MQGetGasPercentage(sens.MQRead() / sens.R0, gas_type.CO);
+                    Debug.Print("CO: " + val);
+                    val = sens.MQGetGasPercentage(sens.MQRead() / sens.R0, gas_type.SMOKE);
+                    Debug.Print("Smoke: " + val);
+                    Thread.Sleep(1000);
+                }
+                
+                
+
+
                 button.ButtonPressed += new GTM.GHIElectronics.Button.ButtonEventHandler(GetTemperatures);
 
             }

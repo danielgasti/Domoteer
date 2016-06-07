@@ -15,7 +15,7 @@ namespace Re_Do_Do {
     
     public partial class Program : Gadgeteer.Program {
         
-        /// <summary>The Display T35 module (not connected).</summary>
+        /// <summary>The Display T35 module using sockets 14, 13, 12 and 10 of the mainboard.</summary>
         private Gadgeteer.Modules.GHIElectronics.DisplayT35 displayT35;
         
         /// <summary>The Multicolor LED module using socket 11 of the mainboard.</summary>
@@ -27,10 +27,10 @@ namespace Re_Do_Do {
         /// <summary>The USB Client DP module using socket 1 of the mainboard.</summary>
         private Gadgeteer.Modules.GHIElectronics.USBClientDP usbClientDP;
         
-        /// <summary>The Camera module (not connected).</summary>
+        /// <summary>The Camera module using socket 3 of the mainboard.</summary>
         private Gadgeteer.Modules.GHIElectronics.Camera camera;
         
-        /// <summary>The Extender module (not connected).</summary>
+        /// <summary>The Extender module using socket 9 of the mainboard.</summary>
         private Gadgeteer.Modules.GHIElectronics.Extender extender;
         
         /// <summary>The Button module using socket 8 of the mainboard.</summary>
@@ -58,12 +58,12 @@ namespace Re_Do_Do {
         }
         
         private void InitializeModules() {
-            Microsoft.SPOT.Debug.Print("The module \'displayT35\' was not connected in the designer and will be null.");
+            this.displayT35 = new GTM.GHIElectronics.DisplayT35(14, 13, 12, 10);
             this.multicolorLED = new GTM.GHIElectronics.MulticolorLED(11);
             this.ethernetJ11D = new GTM.GHIElectronics.EthernetJ11D(7);
             this.usbClientDP = new GTM.GHIElectronics.USBClientDP(1);
-            Microsoft.SPOT.Debug.Print("The module \'camera\' was not connected in the designer and will be null.");
-            Microsoft.SPOT.Debug.Print("The module \'extender\' was not connected in the designer and will be null.");
+            this.camera = new GTM.GHIElectronics.Camera(3);
+            this.extender = new GTM.GHIElectronics.Extender(9);
             this.button = new GTM.GHIElectronics.Button(8);
         }
     }
