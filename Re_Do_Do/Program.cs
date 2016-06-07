@@ -178,7 +178,7 @@ namespace Re_Do_Do
                 stack.Children.Add(txtMsgSMOKE);
                 stack.Children.Add(txtMsg);
                 canvas.Children.Add(stack);
-                window.TouchDown += new Microsoft.SPOT.Input.TouchEventHandler(window_TouchDown);
+                //window.TouchDown += new Microsoft.SPOT.Input.TouchEventHandler(window_TouchDown);
             }
 
             //void window_TouchDown(object sender, Microsoft.SPOT.Input.TouchEventArgs e)
