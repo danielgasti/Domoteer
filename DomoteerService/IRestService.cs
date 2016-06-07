@@ -41,8 +41,8 @@ namespace DomoteerService
         Method = "POST",
         ResponseFormat = WebMessageFormat.Json,
         BodyStyle = WebMessageBodyStyle.Wrapped,
-        UriTemplate = "putGas?lgp={lgp}&co={co}&smoke={smoke}&date={date}")]
-        String putGas(String lgp, String co, String smoke, String date);
+        UriTemplate = "putGas?lpg={lpg}&co={co}&smoke={smoke}&date={date}")]
+        String putGas(String lpg, String co, String smoke, String date);
 
     }
 

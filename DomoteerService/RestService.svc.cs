@@ -120,12 +120,12 @@ namespace DomoteerService
                         while (temperaturesReader.Read() && i < int.Parse(n))
                         {
                             Gas g = new Gas();
-                            g.LGP = temperaturesReader.GetString(1);
+                            g.lpg = temperaturesReader.GetString(1);
                             g.CO = temperaturesReader.GetString(2);
                             g.SMOKE = temperaturesReader.GetString(3);
                             g.timestamp = temperaturesReader.GetString(4);
 
-                            log.Debug("- LGP: " + g.LGP + " - CO: " + g.CO +  " - SMOKE: " + g.SMOKE + " - timestamp: " + g.timestamp);
+                            log.Debug("- lpg: " + g.lpg + " - CO: " + g.CO +  " - SMOKE: " + g.SMOKE + " - timestamp: " + g.timestamp);
 
                             gasses.Add(g);
                             i++;
@@ -146,20 +146,21 @@ namespace DomoteerService
             return gasses;
         }
 
-        public String putGas(String lgp, String co, String smoke, String date)
+        public String putGas(String lpg, String co, String smoke, String date)
         {
             log.Debug("Put Gas request");
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 try
                 {
+                    log.Debug("Pre QUERY - lpg: " + lpg + " - CO: " + co + " - SMOKE: " + smoke + " - timestamp: " + date);
                     conn.Open();
-                    SqlCommand insertTemp = new SqlCommand("insert into Gas(lgp, co, smoke, T_timestamp) values (@lgp, @co, @smoke ,@date)", conn);
-                    insertTemp.Parameters.AddWithValue("@lgp", lgp == null ? "" : lgp);
+                    SqlCommand insertTemp = new SqlCommand("insert into Gas(lpg, co, smoke, T_timestamp) values (@lpg, @co, @smoke ,@date)", conn);
+                    insertTemp.Parameters.AddWithValue("@lpg", lpg == null ? "" : lpg);
                     insertTemp.Parameters.AddWithValue("@co", co == null ? "" : co);
                     insertTemp.Parameters.AddWithValue("@smoke", smoke == null ? "" : smoke);
                     insertTemp.Parameters.AddWithValue("@date", date == null ? "" : date);
-                    log.Debug("- LGP: " + lgp + " - CO: " + co + " - SMOKE: " + smoke + " - timestamp: " + date);
+                    log.Debug("- lpg: " + lpg + " - CO: " + co + " - SMOKE: " + smoke + " - timestamp: " + date);
                     insertTemp.ExecuteNonQuery();
                 }
                 catch (Exception ex)
@@ -172,7 +173,7 @@ namespace DomoteerService
 
 
 
-                return "put: - LGP: " + lgp + " - CO: " + co + " - SMOKE: " + smoke  + " at: " + date;
+                return "put: - lpg: " + lpg + " - CO: " + co + " - SMOKE: " + smoke  + " at: " + date;
             }
         }
     }

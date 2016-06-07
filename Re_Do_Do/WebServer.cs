@@ -21,6 +21,11 @@ namespace Re_Do_Do
         string ipAddress;
         private Hashtable WebPageList;
         Sensore_Temperatura_43 temperatureSensor;
+        private string temperature;
+        private string lpg;
+        private string co;
+        private string smoke;
+        private string timestamp;
 
         private string IPAddress = "http://192.168.0.8/Domoteer/";
 
@@ -292,7 +297,7 @@ namespace Re_Do_Do
         public WebPage JsBootstrap { get; set; }
 
 
-
+        #region Service
 
         public void GetTemperatures(string n)
         {
@@ -352,6 +357,7 @@ namespace Re_Do_Do
             Debug.Print("Response received:\n");
             Debug.Print("- response status = " + response.StatusCode);
             Debug.Print("- response content =\n" + response.Text);
+            PutGas(lpg, co, smoke, timestamp);
         }
 
         public void GetGas(string n)
@@ -384,10 +390,10 @@ namespace Re_Do_Do
             Debug.Print("- response content =\n" + response.Text);
         }
 
-        public void PutGas(String lgp, String co, String smoke, String date)
+        public void PutGas(String lpg, String co, String smoke, String date)
         {
             // Create the form values
-            var formValues = "lgp=" + lgp + "&co=" + co + "&smoke" + smoke + "&date=" + date;
+            var formValues = "lpg=" + lpg + "&co=" + co + "&smoke=" + smoke + "&date=" + date;
 
 
             // Create GET content
@@ -412,6 +418,19 @@ namespace Re_Do_Do
             Debug.Print("Response received:\n");
             Debug.Print("- response status = " + response.StatusCode);
             Debug.Print("- response content =\n" + response.Text);
+        }
+
+        #endregion
+
+
+        public void pushData(string temperature, string lpg, string co, string smoke, string timestamp)
+        {
+            this.temperature = temperature;
+            this.lpg = lpg;
+            this.co = co;
+            this.smoke = smoke;
+            this.timestamp = timestamp;
+            PutTemperatures(temperature, timestamp);
         }
 
     }

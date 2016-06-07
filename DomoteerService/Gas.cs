@@ -10,7 +10,7 @@ namespace DomoteerService
     public class Gas
     {
         [DataMember]
-        public String LGP { get; set; }
+        public String lpg { get; set; }
         [DataMember]
         public String CO { get; set; }
         [DataMember]
