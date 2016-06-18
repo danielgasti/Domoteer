@@ -28,7 +28,9 @@ namespace Re_Do_Do
             DomoteerWebServer server;
             private object GetTemperaturesWS;
             Gas_Sensor sens;
-            GT.Timer timer;
+            PIR_Module pir;
+            GT.Timer timer_gas;
+            GT.Timer timer_PIR;
             private string temp;
             private string lpg;
             private string smoke;
@@ -48,6 +50,12 @@ namespace Re_Do_Do
                 s.setup();
                 Temperatura t = s.getTemp();
                 double valor = t.BinToCelsius();
+                #endregion
+
+                #region PIR
+
+                pir = new PIR_Module(extender);
+
                 #endregion
 
                 #region SENSORE GAS
@@ -72,13 +80,14 @@ namespace Re_Do_Do
 
                 #endregion
 
-                #region TIMER
+                #region TIMER_GAS
 
-                timer = new GT.Timer(30000);
-                timer.Tick += new GT.Timer.TickEventHandler(Timer_Tick);
-                timer.Start();
+                timer_gas = new GT.Timer(30000);
+                timer_gas.Tick += new GT.Timer.TickEventHandler(Timer_Gas_Tick);
+                timer_gas.Start();
 
                 #endregion
+
 
                 //while (true)
                 //{
@@ -97,7 +106,8 @@ namespace Re_Do_Do
                 setupWindow();
             }
 
-            private void Timer_Tick(GT.Timer timer)
+
+            private void Timer_Gas_Tick(GT.Timer timer)
             {
                 Debug.Print("Button pressed");
                 temp = s.getTemp().BinToCelsius().ToString();

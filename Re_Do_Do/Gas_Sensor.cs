@@ -30,6 +30,7 @@ namespace Re_Do_Do
         private readonly int READ_SAMPLE_INTERVAL = 5;
         private readonly double R0_CLEAR_AIR_FACTOR = 9.83;
         private Gadgeteer.SocketInterfaces.AnalogInput a;
+
         public Gas_Sensor(Extender extender)
         {
             a = extender.CreateAnalogInput(GT.Socket.Pin.Five);
