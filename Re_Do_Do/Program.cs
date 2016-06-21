@@ -73,9 +73,9 @@ namespace Re_Do_Do
                 #endregion
 
                 #region SERVER
-                server = new DomoteerWebServer(ethernetJ11D, multicolorLED, displayT35, s);
-                server.initConnection();
-                server.RunWebServer();
+                //server = new DomoteerWebServer(ethernetJ11D, multicolorLED, displayT35, s);
+                //server.initConnection();
+                //server.RunWebServer();
 
 
                 #endregion
@@ -84,7 +84,7 @@ namespace Re_Do_Do
 
                 timer_gas = new GT.Timer(30000);
                 timer_gas.Tick += new GT.Timer.TickEventHandler(Timer_Gas_Tick);
-                timer_gas.Start();
+                //timer_gas.Start();
 
                 #endregion
 
