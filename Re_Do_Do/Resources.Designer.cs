@@ -33,6 +33,19 @@ namespace Re_Do_Do
         {
             return ((string)(Microsoft.SPOT.ResourceUtility.GetObject(ResourceManager, id)));
         }
+        internal static byte[] GetBytes(Resources.BinaryResources id)
+        {
+            return ((byte[])(Microsoft.SPOT.ResourceUtility.GetObject(ResourceManager, id)));
+        }
+        [System.SerializableAttribute()]
+        internal enum BinaryResources : short
+        {
+            save = -26714,
+            settings = -20938,
+            plus = -14113,
+            minus = -11656,
+            back = 6228,
+        }
         [System.SerializableAttribute()]
         internal enum StringResources : short
         {
