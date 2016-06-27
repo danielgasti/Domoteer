@@ -45,11 +45,13 @@ namespace Re_Do_Do
         public Text initminute;
         public Text initHourEnd;
         public Text initMinuteEnd;
+        public static String time_sett;
 
 
         void ProgramStarted()
         {
             first = true;
+            time_sett = Resources.GetString(Resources.StringResources.PIR_Sensor);
 
             #region SENSORE TEMPERATURA
             s = new Sensore_Temperatura_43();
@@ -90,7 +92,7 @@ namespace Re_Do_Do
 
             timer_gas = new GT.Timer(30000);
             timer_gas.Tick += new GT.Timer.TickEventHandler(Timer_Gas_Tick);
-            //timer_gas.Start();
+            timer_gas.Start();
 
             #endregion
 
@@ -111,7 +113,7 @@ namespace Re_Do_Do
 
             setupWindow();
 
-            
+
         }
 
 
@@ -221,6 +223,17 @@ namespace Re_Do_Do
 
         private void setSetupWindow()
         {
+            String res;
+            String[] times;
+            String[] init_time;
+            String[] end_time;
+            if (time_sett == null)
+                res = Resources.GetString(Resources.StringResources.PIR_Sensor);
+            else
+                res = time_sett;
+            times = res.Split('/');
+            init_time = times[0].Split('-');
+            end_time = times[1].Split('-');
             window = displayT35.WPFWindow;
             window.Child = c_sett;
             baseFont = Resources.GetFont(Resources.FontResources.NinaB);
@@ -233,15 +246,15 @@ namespace Re_Do_Do
             StackPanel content = new StackPanel(Orientation.Horizontal);
 
 
-       #region inizio zona critica
-            
+            #region inizio zona critica
+
             StackPanel left = new StackPanel(Orientation.Vertical);
 
             StackPanel labelStart = new StackPanel(Orientation.Vertical);
             Text labelS = new Text(baseFont, "Start");
             labelS.SetMargin(65, 25, 0, 5);
             left.Children.Add(labelS);
-            
+
             StackPanel plus = new StackPanel(Orientation.Horizontal);
             Image plushour = new Image(new Bitmap(Resources.GetBytes(Resources.BinaryResources.plus), Bitmap.BitmapImageType.Jpeg));
             Image plusminute = new Image(new Bitmap(Resources.GetBytes(Resources.BinaryResources.plus), Bitmap.BitmapImageType.Jpeg));
@@ -260,8 +273,8 @@ namespace Re_Do_Do
             inithour.SetMargin(50, 20, 10, 0);
             initminute = new Text(baseFont, "Starting…");
             initminute.SetMargin(5, 20, 10, 0);
-            inithour.TextContent = "0";
-            initminute.TextContent = "0";
+            inithour.TextContent = init_time[0];
+            initminute.TextContent = init_time[1];
             textBoxes.Children.Add(inithour);
             textBoxes.Children.Add(initminute);
 
@@ -283,8 +296,8 @@ namespace Re_Do_Do
             save.SetMargin(10, 14, 10, 0);
             save.TouchDown += new Microsoft.SPOT.Input.TouchEventHandler(saveSettings);
             navigator_sx.Children.Add(save);
-            
-      #endregion
+
+            #endregion
 
             left.Children.Add(plus);
             left.Children.Add(textBoxes);
@@ -292,7 +305,7 @@ namespace Re_Do_Do
             left.Children.Add(navigator_sx);
             content.Children.Add(left);
 
-      #region fine zona critica
+            #region fine zona critica
             StackPanel right = new StackPanel(Orientation.Vertical);
 
             StackPanel labelEnd = new StackPanel(Orientation.Vertical);
@@ -318,8 +331,8 @@ namespace Re_Do_Do
             initHourEnd.SetMargin(50, 20, 10, 0);
             initMinuteEnd = new Text(baseFont, "Starting…");
             initMinuteEnd.SetMargin(5, 20, 10, 0);
-            initHourEnd.TextContent = "0";
-            initMinuteEnd.TextContent = "0";
+            initHourEnd.TextContent = end_time[0];
+            initMinuteEnd.TextContent = end_time[1];
             textBoxesEnd.Children.Add(initHourEnd);
             textBoxesEnd.Children.Add(initMinuteEnd);
 
@@ -337,11 +350,11 @@ namespace Re_Do_Do
 
             StackPanel navigator_dx = new StackPanel(Orientation.Horizontal);
             Image back = new Image(new Bitmap(Resources.GetBytes(Resources.BinaryResources.back), Bitmap.BitmapImageType.Jpeg));
-            back.SetMargin(10, 14, 10, 0);
+            back.SetMargin(25, 14, 10, 0);
             back.TouchDown += new Microsoft.SPOT.Input.TouchEventHandler(goBack);
             navigator_dx.Children.Add(back);
-       #endregion
-            
+            #endregion
+
             right.Children.Add(increaseEnd);
             right.Children.Add(textBoxesEnd);
             right.Children.Add(decreaseEnd);
@@ -350,27 +363,33 @@ namespace Re_Do_Do
 
             c_sett.Children.Add(settings);
             c_sett.Children.Add(content);
-            
-            
+
+
         }
 
-       
+
 
         void increase_touch_hour(object sender, Microsoft.SPOT.Input.TouchEventArgs e)
         {
             Int32 hour = Int32.Parse(inithour.TextContent) + 1;
-            inithour.TextContent = hour % 24 + "";
+            if(hour >= 10)
+                inithour.TextContent = hour % 24 + "";
+            else
+                inithour.TextContent = "0" + hour % 24;
         }
 
-        
+
         void increase_touch_minute(object sender, Microsoft.SPOT.Input.TouchEventArgs e)
         {
             Int32 minute = Int32.Parse(initminute.TextContent) + 1;
-            initminute.TextContent = minute % 60 + "";
+            if(minute%60 >= 10)
+                initminute.TextContent = minute % 60 + "";
+            else
+                initminute.TextContent = "0" + minute % 60;
 
         }
 
-        
+
         void decrease_touch_hour(object sender, Microsoft.SPOT.Input.TouchEventArgs e)
         {
             if (Int32.Parse(inithour.TextContent) == 0)
@@ -378,11 +397,14 @@ namespace Re_Do_Do
             else
             {
                 Int32 hour = Int32.Parse(inithour.TextContent) - 1;
-                inithour.TextContent = hour + "";
+                if (hour >= 10)
+                    inithour.TextContent = hour + "";
+                else
+                    inithour.TextContent = "0" + hour;
             }
         }
 
-        
+
         void decrease_touch_minute(object sender, Microsoft.SPOT.Input.TouchEventArgs e)
         {
             if (Int32.Parse(initminute.TextContent) == 0)
@@ -390,23 +412,31 @@ namespace Re_Do_Do
             else
             {
                 Int32 hour = Int32.Parse(initminute.TextContent) - 1;
-                initminute.TextContent = hour + "";
+                if(hour < 10)
+                    initminute.TextContent = "0" + hour;
+                else
+                    initminute.TextContent = hour + "";
             }
         }
 
-        
+
         void increase_touch_hour_end(object sender, Microsoft.SPOT.Input.TouchEventArgs e)
         {
             Int32 hour = Int32.Parse(initHourEnd.TextContent) + 1;
-            initHourEnd.TextContent = hour % 24 + "";
+            if(hour%24 >= 10)
+                initHourEnd.TextContent = hour % 24 + "";
+            else
+                initHourEnd.TextContent = "0" + hour % 24;
         }
 
 
         void increase_touch_minute_end(object sender, Microsoft.SPOT.Input.TouchEventArgs e)
         {
             Int32 minute = Int32.Parse(initMinuteEnd.TextContent) + 1;
-            initMinuteEnd.TextContent = minute % 60 + "";
-
+            if(minute%60 >= 10)
+                initMinuteEnd.TextContent = minute % 60 + "";
+            else
+                initMinuteEnd.TextContent = "0" + minute % 60;
         }
 
 
@@ -417,7 +447,8 @@ namespace Re_Do_Do
             else
             {
                 Int32 hour = Int32.Parse(initHourEnd.TextContent) - 1;
-                initHourEnd.TextContent = hour + "";
+                if(hour >= 10)
+                    initHourEnd.TextContent = hour + "";
             }
         }
 
@@ -429,7 +460,10 @@ namespace Re_Do_Do
             else
             {
                 Int32 hour = Int32.Parse(initMinuteEnd.TextContent) - 1;
-                initMinuteEnd.TextContent = hour + "";
+                if(hour >= 10)
+                    initMinuteEnd.TextContent = hour + "";
+                else
+                    initMinuteEnd.TextContent = "0" + hour;
             }
         }
 
@@ -449,7 +483,9 @@ namespace Re_Do_Do
 
         private void saveSettings(object sender, Microsoft.SPOT.Input.TouchEventArgs e)
         {
-            //TODO implementare salvataggio su file delle impostazioni scelte dall'utente
+
+            //Tipo di salvataggio ---> 11-00/23-50
+            time_sett = inithour.TextContent + "-" + initminute.TextContent + "/" + initHourEnd.TextContent + "-" + initMinuteEnd.TextContent;
             setupWindow();
         }
 

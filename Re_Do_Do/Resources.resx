@@ -157,4 +157,8 @@
   <data name="settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\settings.jpg;System.Byte[], mscorlib, Version=4.3.1.0, Culture=neutral, PublicKeyToken=null</value>
   </data>
+  <data name="PIR_Sensor" xml:space="preserve">
+    <value>00-00/05-00</value>
+    <comment>Intervallo di tempo per il sensore di movimento</comment>
+  </data>
 </root>

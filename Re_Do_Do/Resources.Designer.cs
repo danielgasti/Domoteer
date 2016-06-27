@@ -49,6 +49,7 @@ namespace Re_Do_Do
         [System.SerializableAttribute()]
         internal enum StringResources : short
         {
+            PIR_Sensor = -21590,
             plots = -18961,
             jquery_2_2_4_min = -5108,
             index = -2501,
