@@ -44,6 +44,22 @@ namespace DomoteerService
         UriTemplate = "putGas?lpg={lpg}&co={co}&smoke={smoke}&date={date}")]
         String putGas(String lpg, String co, String smoke, String date);
 
+        [OperationContract]
+        [WebInvoke(
+        Method = "POST",
+        ResponseFormat = WebMessageFormat.Json,
+        BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "getCross?n={n}")]
+        List<Cross> getCross(String n);
+
+        [OperationContract]
+        [WebInvoke(
+        Method = "POST",
+        ResponseFormat = WebMessageFormat.Json,
+        BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "putCross?date={date}")]
+        String putCross(String date);
+
     }
 
 
