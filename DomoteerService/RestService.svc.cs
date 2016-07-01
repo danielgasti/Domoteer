@@ -170,10 +170,75 @@ namespace DomoteerService
                     return "error";
                 }
 
-
-
-
                 return "put: - lpg: " + lpg + " - CO: " + co + " - SMOKE: " + smoke  + " at: " + date;
+            }
+        }
+
+        public List<Cross> getCross(string n)
+        {
+            log.Debug("Get Cross request");
+
+            List<Cross> crosses = new List<Cross>();
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    SqlCommand selectCross = new SqlCommand("select * from Cross order by T_timestamp", conn);
+                    SqlDataReader crossesReader = selectCross.ExecuteReader();
+
+                    if (crossesReader.HasRows)
+                    {
+
+                        int i = 0;
+                        while (crossesReader.Read() && i < int.Parse(n))
+                        {
+                            Cross c = new Cross();
+                            c.timestamp = crossesReader.GetString(1);
+
+                            log.Debug(" - timestamp: " + c.timestamp);
+
+                            crosses.Add(g);
+                            i++;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    log.Error(ex.ToString());
+                    Console.WriteLine("Error on query: " + ex.ToString());
+                }
+
+
+
+            }
+
+
+            return crosses;
+        }
+
+        public string putCross(string date)
+        {
+
+            log.Debug("Put Cross request");
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    log.Debug("Pre QUERY - timestamp: " + date);
+                    conn.Open();
+                    SqlCommand insertCross = new SqlCommand("insert into Cross(T_timestamp) values (@date)", conn);
+                    insertCross.Parameters.AddWithValue("@date", date == null ? "" : date);
+                    log.Debug(" - timestamp: " + date);
+                    insertCross.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    log.Error(ex.ToString());
+                    Console.WriteLine("Error on query: " + ex.ToString());
+                    return "error";
+                }
+                return "put at: " + date;
             }
         }
     }
