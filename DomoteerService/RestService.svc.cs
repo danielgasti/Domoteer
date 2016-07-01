@@ -180,7 +180,7 @@ namespace DomoteerService
 
             List<Cross> crosses = new List<Cross>();
             using (SqlConnection conn = new SqlConnection(connectionString))
-            {
+            { 
                 try
                 {
                     conn.Open();
