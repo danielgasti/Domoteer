@@ -73,22 +73,14 @@
     <Reference Include="Gadgeteer.WebServer, Version=2.43.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="GHI.Hardware, Version=4.3.7.10, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
+    <Reference Include="GHI.Hardware, Version=4.3.7.10, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="GHI.Networking, Version=4.3.7.10, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="GHI.Usb, Version=4.3.7.10, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="GHIElectronics.Gadgeteer.FEZSpider, Version=4.3.7.10, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="GTM.GHIElectronics.Button, Version=4.3.7.10, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="GTM.GHIElectronics.Camera, Version=4.3.7.10, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="GTM.GHIElectronics.DisplayT35, Version=4.3.7.10, Culture=neutral, processorArchitecture=MSIL">
@@ -179,5 +171,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\save.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\temperatura_ridotto.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gas.jpg" />
   </ItemGroup>
 </Project>

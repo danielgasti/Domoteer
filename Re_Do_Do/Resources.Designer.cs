@@ -45,6 +45,8 @@ namespace Re_Do_Do
             plus = -14113,
             minus = -11656,
             back = 6228,
+            gas = 17439,
+            temperatura_ridotto = 32726,
         }
         [System.SerializableAttribute()]
         internal enum StringResources : short

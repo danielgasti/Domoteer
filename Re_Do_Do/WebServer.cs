@@ -1,3 +1,4 @@
+
 using System;
 using Microsoft.SPOT;
 using Gadgeteer.Modules.GHIElectronics;
@@ -320,6 +321,34 @@ namespace Re_Do_Do
 
             // Post the form
             request.SendRequest();
+        }
+
+        public void PutCross(string t)
+        {
+            // Create the form values
+            var formValues = "date=" + t;
+
+            Debug.Print("Cross timestamp: " + t);
+            // Create GET content
+            //var content = Gadgeteer.Networking.POSTContent.CreateTextBasedContent(formValues);
+            POSTContent emptyPost = new POSTContent();
+
+            // Create the request
+            var request = Gadgeteer.Networking.HttpHelper.CreateHttpPostRequest(
+                IPAddress + @"RestService.svc/putCross?" + formValues // the URL to post to
+                , emptyPost // the form values
+                , null // the mime type for an HTTP form
+            );
+
+            request.ResponseReceived += new HttpRequest.ResponseHandler(PutCross_ResponceRecevided);
+
+            // Post the form
+            request.SendRequest();
+        }
+
+        private void PutCross_ResponceRecevided(HttpRequest sender, HttpResponse response)
+        {
+            Debug.Print("Movimento Salvato\n");
         }
 
         private void GetTemperatures_ResponseReceived(HttpRequest sender, HttpResponse response)

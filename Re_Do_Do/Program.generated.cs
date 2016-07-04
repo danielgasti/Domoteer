@@ -27,9 +27,6 @@ namespace Re_Do_Do {
         /// <summary>The USB Client DP module using socket 1 of the mainboard.</summary>
         private Gadgeteer.Modules.GHIElectronics.USBClientDP usbClientDP;
         
-        /// <summary>The Camera module using socket 3 of the mainboard.</summary>
-        private Gadgeteer.Modules.GHIElectronics.Camera camera;
-        
         /// <summary>The Extender module using socket 9 of the mainboard.</summary>
         private Gadgeteer.Modules.GHIElectronics.Extender extender;
         
@@ -62,7 +59,6 @@ namespace Re_Do_Do {
             this.multicolorLED = new GTM.GHIElectronics.MulticolorLED(11);
             this.ethernetJ11D = new GTM.GHIElectronics.EthernetJ11D(7);
             this.usbClientDP = new GTM.GHIElectronics.USBClientDP(1);
-            this.camera = new GTM.GHIElectronics.Camera(3);
             this.extender = new GTM.GHIElectronics.Extender(9);
             this.button = new GTM.GHIElectronics.Button(8);
         }

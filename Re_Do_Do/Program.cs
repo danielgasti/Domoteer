@@ -20,22 +20,24 @@ namespace Re_Do_Do
 {
     public partial class Program
     {
-        Font baseFont;
-        Window window;
-        Canvas canvas = new Canvas();
-        Canvas c_sett = new Canvas();
-        bool first;
-        Sensore_Temperatura_43 s;
-        DomoteerWebServer server;
+        private Font baseFont;
+        private Window window;
+        private Canvas canvas = new Canvas();
+        private Canvas c_sett = new Canvas();
+        private bool first;
+        private Sensore_Temperatura_43 s;
+        private DomoteerWebServer server;
         private object GetTemperaturesWS;
-        Gas_Sensor sens;
-        PIR_Module pir;
-        GT.Timer timer_gas;
-        GT.Timer timer_PIR;
+        private Gas_Sensor sens;
+        private PIR_Module pir;
+        private GT.Timer timer_gas;
+        private GT.Timer timer_PIR;
+        private GT.Timer timer_display;
         private string temp;
         private string lpg;
         private string smoke;
         private string co;
+        //public Text settingsMessage;
         public Text txtMsgTemp;
         public Text txtMsgLPG;
         public Text txtMsgCO;
@@ -60,9 +62,17 @@ namespace Re_Do_Do
             double valor = t.BinToCelsius();
             #endregion
 
+            #region SERVER
+            server = new DomoteerWebServer(ethernetJ11D, multicolorLED, displayT35, s);
+            server.initConnection();
+            server.RunWebServer();
+
+
+            #endregion
+
             #region PIR
 
-            pir = new PIR_Module(extender);
+            pir = new PIR_Module(extender, server);
 
             #endregion
 
@@ -70,44 +80,18 @@ namespace Re_Do_Do
             sens = new Gas_Sensor(extender);
             #endregion
 
-            #region SENSORE INFRAROSSI
-            #endregion
-
-            #region CAMERA
-            //this.camera.CameraConnected += Camera_Connected;
-            ////while (!camera.CameraReady)
-            ////    Thread.Sleep(1000);
-            //this.camera.PictureCaptured += Picture_Captured;
-            #endregion
-
-            #region SERVER
-            //server = new DomoteerWebServer(ethernetJ11D, multicolorLED, displayT35, s);
-            //server.initConnection();
-            //server.RunWebServer();
-
-
-            #endregion
-
             #region TIMER_GAS
-
-            timer_gas = new GT.Timer(30000);
+            timer_gas = new GT.Timer(20000);
             timer_gas.Tick += new GT.Timer.TickEventHandler(Timer_Gas_Tick);
             timer_gas.Start();
 
             #endregion
 
-
-            //while (true)
-            //{
-            //    double val = sens.MQGetGasPercentage(sens.MQRead() / sens.R0, gas_type.LPG);
-            //    Debug.Print("Gpl: " + val);
-            //    val = sens.MQGetGasPercentage(sens.MQRead() / sens.R0, gas_type.CO);
-            //    Debug.Print("CO: " + val);
-            //    val = sens.MQGetGasPercentage(sens.MQRead() / sens.R0, gas_type.SMOKE);
-            //    Debug.Print("Smoke: " + val);
-            //    Thread.Sleep(1000);
-            //}
-
+            #region TIMER_AGGIORNAMENTO_SCHERMO
+            timer_display = new GT.Timer(5000);
+            timer_display.Tick += new GT.Timer.TickEventHandler(Timer_Display_Tick);
+            timer_display.Start();
+            #endregion
 
             button.ButtonPressed += new GTM.GHIElectronics.Button.ButtonEventHandler(GetTemperatures);
 
@@ -116,10 +100,15 @@ namespace Re_Do_Do
 
         }
 
+        private void Timer_Display_Tick(GT.Timer timer)
+        {
+            updateValue();
+        }
+
 
         private void Timer_Gas_Tick(GT.Timer timer)
         {
-            Debug.Print("Button pressed");
+
             temp = s.getTemp().BinToCelsius().ToString();
             DateTime startDate = DateTime.Now;
             Debug.Print("Sending: " + temp + " - " + startDate.ToString("yyyyMMddHHmmss"));
@@ -129,14 +118,6 @@ namespace Re_Do_Do
             Debug.Print("CO: " + co);
             smoke = sens.MQGetGasPercentage(sens.MQRead() / sens.R0, gas_type.SMOKE).ToString();
             Debug.Print("Smoke: " + smoke);
-
-            //if (first)
-            //{
-            updateValue();
-            //    first = false;
-            //}
-
-
 
             server.pushData(temp, lpg, co, smoke, startDate.ToString("yyyyMMddHHmmss"));
         }
@@ -165,51 +146,65 @@ namespace Re_Do_Do
             server.PutGas(lpg.ToString(), co.ToString(), smoke.ToString(), startDate.ToString("yyyyMMddHHmmss"));
         }
 
-
-
-        private void Picture_Captured(Camera sender, GT.Picture e)
-        {
-            displayT35.SimpleGraphics.Clear();
-            displayT35.SimpleGraphics.DisplayImage(e, 0, 0);
-        }
-
-        private void Camera_Connected(Camera sender, EventArgs e)
-        {
-            sender.TakePicture();
-        }
-
-
         private void setupWindow()
         {
             baseFont = Resources.GetFont(Resources.FontResources.NinaB);
+            StackPanel stack = new StackPanel();
+            canvas.SetMargin(5);
+
+            StackPanel temperaturePanel = new StackPanel(Orientation.Horizontal);
+            Image tempIcon = new Image(new Bitmap(Resources.GetBytes(Resources.BinaryResources.temperatura_ridotto), Bitmap.BitmapImageType.Jpeg));
+            txtMsgTemp = new Text(baseFont, "Starting...");
+            txtMsgTemp.TextWrap = true;
+            txtMsgTemp.SetMargin(20, 20, 0, 0);
+            tempIcon.SetMargin(12, 0, 0, 0);
+            temperaturePanel.Children.Add(tempIcon);
+            temperaturePanel.Children.Add(txtMsgTemp);
+           
+
+            StackPanel gasPanel = new StackPanel(Orientation.Horizontal);
+            StackPanel gasData = new StackPanel(Orientation.Vertical);
+            Image gasIcon = new Image(new Bitmap(Resources.GetBytes(Resources.BinaryResources.gas), Bitmap.BitmapImageType.Jpeg));
+            txtMsgLPG = new Text(baseFont, "Starting...");
+            txtMsgCO = new Text(baseFont, "Starting...");
+            txtMsgSMOKE = new Text(baseFont, "Starting...");
+            txtMsg = new Text(baseFont, "");
+            gasIcon.SetMargin(7, 20, 0, 0);
+            txtMsgLPG.SetMargin(12, 22, 0, 0);
+            txtMsgCO.SetMargin(12, 2, 0, 0);
+            txtMsgSMOKE.SetMargin(12, 2, 0, 0);
+            
+            gasData.Children.Add(txtMsgLPG);
+            gasData.Children.Add(txtMsgCO);
+            gasData.Children.Add(txtMsgSMOKE);
+            
+            gasPanel.Children.Add(gasIcon);
+            gasPanel.Children.Add(gasData);
+           
+
+
+            StackPanel settingsPanel = new StackPanel(Orientation.Horizontal);
             Image settings = new Image(new Bitmap(Resources.GetBytes(Resources.BinaryResources.settings), Bitmap.BitmapImageType.Jpeg));
-            settings.SetMargin(180, 80, 0, 0);
+            //settingsMessage = new Text(baseFont, "Change Settings: ");
             settings.TouchDown += new Microsoft.SPOT.Input.TouchEventHandler(settings_navigator);
+            //settingsMessage.SetMargin(5, 40, 0, 0);
+            settings.SetMargin(8, 30, 0, 0);
+            //settingsPanel.Children.Add(settingsMessage);
+            settingsPanel.Children.Add(settings);
+            
+            
+            
             window = displayT35.WPFWindow;
             window.Child = canvas;
-            txtMsgTemp = new Text(baseFont, "Starting…");
-            txtMsgLPG = new Text(baseFont, "Starting…");
-            txtMsgCO = new Text(baseFont, "Starting…");
-            txtMsgSMOKE = new Text(baseFont, "Starting…");
-            txtMsg = new Text(baseFont, "");
-            canvas.SetMargin(5);
-            txtMsgTemp.TextWrap = true;
-            StackPanel stack = new StackPanel();
-            stack.Children.Add(txtMsgTemp);
-            stack.Children.Add(txtMsgLPG);
-            stack.Children.Add(txtMsgCO);
-            stack.Children.Add(txtMsgSMOKE);
+
             stack.Children.Add(txtMsg);
-            stack.Children.Add(settings);
+            stack.Children.Add(temperaturePanel);
+            stack.Children.Add(gasPanel);
+            stack.Children.Add(settingsPanel);
+
             canvas.Children.Add(stack);
-            //window.TouchDown += new Microsoft.SPOT.Input.TouchEventHandler(window_TouchDown);
         }
 
-        //void window_TouchDown(object sender, Microsoft.SPOT.Input.TouchEventArgs e)
-        //{
-        //    if(!first)
-        //        updateValue();
-        //}
 
         private void updateValue()
         {
@@ -217,7 +212,6 @@ namespace Re_Do_Do
             txtMsgLPG.TextContent = "LPG: " + lpg.Substring(0, 6) + " ppm";
             txtMsgCO.TextContent = "CO: " + co.Substring(0, 6) + " ppm";
             txtMsgSMOKE.TextContent = "Smoke: " + smoke.Substring(0, 6) + " ppm";
-            txtMsg.TextContent = "Touch to Update values";
         }
 
 
@@ -240,7 +234,7 @@ namespace Re_Do_Do
 
             StackPanel settings = new StackPanel(Orientation.Vertical);
             Text impostazioni = new Text(baseFont, "Settings");
-            impostazioni.SetMargin(120, 2, 0, 10);
+            impostazioni.SetMargin(130, 2, 0, 10);
             settings.Children.Add(impostazioni);
 
             StackPanel content = new StackPanel(Orientation.Horizontal);
@@ -252,7 +246,7 @@ namespace Re_Do_Do
 
             StackPanel labelStart = new StackPanel(Orientation.Vertical);
             Text labelS = new Text(baseFont, "Start");
-            labelS.SetMargin(65, 25, 0, 5);
+            labelS.SetMargin(70, 25, 0, 5);
             left.Children.Add(labelS);
 
             StackPanel plus = new StackPanel(Orientation.Horizontal);
@@ -293,7 +287,7 @@ namespace Re_Do_Do
 
             StackPanel navigator_sx = new StackPanel(Orientation.Horizontal);
             Image save = new Image(new Bitmap(Resources.GetBytes(Resources.BinaryResources.save), Bitmap.BitmapImageType.Jpeg));
-            save.SetMargin(10, 14, 10, 0);
+            save.SetMargin(42, 14, 10, 0);
             save.TouchDown += new Microsoft.SPOT.Input.TouchEventHandler(saveSettings);
             navigator_sx.Children.Add(save);
 
@@ -310,13 +304,13 @@ namespace Re_Do_Do
 
             StackPanel labelEnd = new StackPanel(Orientation.Vertical);
             Text labelE = new Text(baseFont, "End");
-            labelE.SetMargin(70, 25, 0, 5);
+            labelE.SetMargin(68, 25, 0, 5);
             right.Children.Add(labelE);
 
             StackPanel increaseEnd = new StackPanel(Orientation.Horizontal);
             Image increaseHourEnd = new Image(new Bitmap(Resources.GetBytes(Resources.BinaryResources.plus), Bitmap.BitmapImageType.Jpeg));
             Image increaseMinuteEnd = new Image(new Bitmap(Resources.GetBytes(Resources.BinaryResources.plus), Bitmap.BitmapImageType.Jpeg));
-            increaseHourEnd.SetMargin(50, 20, 10, 0);
+            increaseHourEnd.SetMargin(22, 20, 10, 0);
             increaseMinuteEnd.SetMargin(5, 20, 10, 0);
             increaseHourEnd.TouchDown += new Microsoft.SPOT.Input.TouchEventHandler(increase_touch_hour_end);
             increaseMinuteEnd.TouchDown += new Microsoft.SPOT.Input.TouchEventHandler(increase_touch_minute_end);
@@ -328,7 +322,7 @@ namespace Re_Do_Do
             StackPanel textBoxesEnd = new StackPanel(Orientation.Horizontal);
             textBoxesEnd.HorizontalAlignment = HorizontalAlignment.Center;
             initHourEnd = new Text(baseFont, "Starting…");
-            initHourEnd.SetMargin(50, 20, 10, 0);
+            initHourEnd.SetMargin(22, 20, 10, 0);
             initMinuteEnd = new Text(baseFont, "Starting…");
             initMinuteEnd.SetMargin(5, 20, 10, 0);
             initHourEnd.TextContent = end_time[0];
@@ -341,7 +335,7 @@ namespace Re_Do_Do
             decreaseEnd.HorizontalAlignment = HorizontalAlignment.Center;
             Image decreaseHourEnd = new Image(new Bitmap(Resources.GetBytes(Resources.BinaryResources.minus), Bitmap.BitmapImageType.Jpeg));
             Image decreaseMinuteEnd = new Image(new Bitmap(Resources.GetBytes(Resources.BinaryResources.minus), Bitmap.BitmapImageType.Jpeg));
-            decreaseHourEnd.SetMargin(50, 20, 10, 0);
+            decreaseHourEnd.SetMargin(22, 20, 10, 0);
             decreaseMinuteEnd.SetMargin(5, 20, 10, 0);
             decreaseHourEnd.TouchDown += new Microsoft.SPOT.Input.TouchEventHandler(decrease_touch_hour_end);
             decreaseMinuteEnd.TouchDown += new Microsoft.SPOT.Input.TouchEventHandler(decrease_touch_minute_end);
@@ -350,7 +344,7 @@ namespace Re_Do_Do
 
             StackPanel navigator_dx = new StackPanel(Orientation.Horizontal);
             Image back = new Image(new Bitmap(Resources.GetBytes(Resources.BinaryResources.back), Bitmap.BitmapImageType.Jpeg));
-            back.SetMargin(25, 14, 10, 0);
+            back.SetMargin(30, 14, 10, 0);
             back.TouchDown += new Microsoft.SPOT.Input.TouchEventHandler(goBack);
             navigator_dx.Children.Add(back);
             #endregion

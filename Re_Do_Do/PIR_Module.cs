@@ -11,98 +11,127 @@ namespace Re_Do_Do
     {
 
         private Extender extender;
+        private DomoteerWebServer server;
         private Gadgeteer.SocketInterfaces.InterruptInput interrupt;
         private Gadgeteer.SocketInterfaces.DigitalIO dig_io;
-        public PIR_Module(Extender extender)
+        private GT.Timer timer_cross;
+        private int count;
+        public PIR_Module(Extender extender, DomoteerWebServer server)
         {
+            this.server = server;
             this.extender = extender;
-            //Controllare BENE i pin, deve essere quello con interrupt
-            interrupt = extender.CreateInterruptInput(GT.Socket.Pin.Three, GT.SocketInterfaces.GlitchFilterMode.Off, GT.SocketInterfaces.ResistorMode.Disabled, GT.SocketInterfaces.InterruptMode.RisingEdge);
-            interrupt.Interrupt += new GT.SocketInterfaces.InterruptEventHandler(mov_det);
-            //dig_io = extender.CreateDigitalIO(GT.Socket.Pin.Three, false, GT.SocketInterfaces.GlitchFilterMode.On, GT.SocketInterfaces.ResistorMode.PullUp);
+            interrupt = extender.CreateInterruptInput(GT.Socket.Pin.Three, GT.SocketInterfaces.GlitchFilterMode.Off, GT.SocketInterfaces.ResistorMode.PullUp, GT.SocketInterfaces.InterruptMode.FallingEdge);
+            interrupt.Interrupt += new GT.SocketInterfaces.InterruptEventHandler(mov_det);           
 
-            //    GT.Timer tim = new GT.Timer(10);
-            //  tim.Tick += new GT.Timer.TickEventHandler(tim_tick);
-            //tim.Start();
+            timer_cross = new GT.Timer(20000);
+            timer_cross.Tick += new GT.Timer.TickEventHandler(Timer_Cross_Tick);
         }
 
-        //private void tim_tick(GT.Timer timer)
-        //{
-        //    if (dig_io.Read())
-        //        Debug.Print("Movimento Rilevato");
-        //    dig_io.Write(false);
-        //}
 
         public void mov_det(GT.SocketInterfaces.InterruptInput input, bool value)
         {
 
-            if (value)
+            if (!value)
             {
-                String[] times;
-                String[] init_time;
-                String[] end_time;
-                Int32 ora_start;
-                Int32 minuto_start;
-                Int32 ora_fine;
-                Int32 minuto_fine;
-                int ora_vera = 1;
-                int minuto_vero = 1;
-                times = Program.time_sett.Split('/');
-                init_time = times[0].Split('-');
-                end_time = times[1].Split('-');
-                ora_start = Int32.Parse(init_time[0]);
-                minuto_start = Int32.Parse(init_time[1]);
-                ora_fine = Int32.Parse(end_time[0]);
-                minuto_fine = Int32.Parse(end_time[1]);
 
-                if (Int32.Parse(init_time[0]) > Int32.Parse(end_time[0]))
+
+                if (count == 0)
                 {
-                    //Ora tra init_time[0] e 23.59 e tra 00.00 e end_time[0]
-                    if (((ora_vera > ora_start) && (ora_vera < 23)) || (ora_fine > 0) && (ora_vera < ora_fine))
-                    {
-                        Debug.Print("Movimento Rilevato");
-                    }
-                    else if (ora_vera == ora_start)
-                    {
-                        if (minuto_vero > minuto_start)
-                        {
-                            Debug.Print("Movimento Rilevato");
-                        }
-                    }
-
-                    else if (ora_vera == ora_fine)
-                        if (minuto_vero < minuto_fine)
-                        {
-                            Debug.Print("Movimento Rilevato");
-                        }
+                    
+                    timer_cross.Start();
+                    count++;
                 }
                 else
                 {
-                    if (ora_vera > ora_start && ora_vera < ora_fine)
-                    {
-                        Debug.Print("Movimento Rilevato");
-                    }
-                    else if (ora_vera == ora_start)
-                    {
-                        if (minuto_vero > minuto_start)
-                        {
-                            Debug.Print("Movimento Rilevato");
-                        }
-                    }
-                    else if (ora_vera == ora_fine)
-                    {
-                        if (minuto_vero < minuto_fine)
-                        {
-                            Debug.Print("Movimento Rilevato");
-                        }
-                    }
+                    timer_cross.Restart();
                 }
+
+
             }
 
 
         }
 
+        private void Timer_Cross_Tick(GT.Timer timer)
+        {
+            
+            count = 0;
+            String[] times;
+            String[] init_time;
+            String[] end_time;
+            Int32 ora_start;
+            Int32 minuto_start;
+            Int32 ora_fine;
+            Int32 minuto_fine;
+            int ora_vera = 1;
+            int minuto_vero = 1;
+            times = Program.time_sett.Split('/');
+            init_time = times[0].Split('-');
+            end_time = times[1].Split('-');
+            ora_start = Int32.Parse(init_time[0]);
+            minuto_start = Int32.Parse(init_time[1]);
+            ora_fine = Int32.Parse(end_time[0]);
+            minuto_fine = Int32.Parse(end_time[1]);
+
+            DateTime startDate = DateTime.Now;
 
 
+            if (Int32.Parse(init_time[0]) > Int32.Parse(end_time[0]))
+            {
+
+                //Ora tra init_time[0] e 23.59 e tra 00.00 e end_time[0]
+                if (((ora_vera > ora_start) && (ora_vera < 23)) || (ora_fine > 0) && (ora_vera < ora_fine))
+                {
+                    Debug.Print("Movimento Rilevato");
+                    server.PutCross(startDate.ToString("yyyyMMddHHmmss"));
+                }
+                else if (ora_vera == ora_start)
+                {
+                    if (minuto_vero > minuto_start)
+                    {
+                        Debug.Print("Movimento Rilevato");
+                        server.PutCross(startDate.ToString("yyyyMMddHHmmss"));
+                    }
+                }
+
+                else if (ora_vera == ora_fine)
+                    if (minuto_vero < minuto_fine)
+                    {
+                        Debug.Print("Movimento Rilevato");
+                        server.PutCross(startDate.ToString("yyyyMMddHHmmss"));
+                    }
+            }
+            else
+            {
+                if (ora_vera > ora_start && ora_vera < ora_fine)
+                {
+                    Debug.Print("Movimento Rilevato");
+                    server.PutCross(startDate.ToString("yyyyMMddHHmmss"));
+                }
+                else if (ora_vera == ora_start)
+                {
+                    if (minuto_vero > minuto_start)
+                    {
+                        Debug.Print("Movimento Rilevato");
+                        server.PutCross(startDate.ToString("yyyyMMddHHmmss"));
+                    }
+                }
+                else if (ora_vera == ora_fine)
+                {
+                    if (minuto_vero < minuto_fine)
+                    {
+                        Debug.Print("Movimento Rilevato");
+                        server.PutCross(startDate.ToString("yyyyMMddHHmmss"));
+                    }
+                }
+            }
+
+            timer_cross.Stop();
+
+        }
     }
+
+
+
+
 }

@@ -184,7 +184,7 @@ namespace DomoteerService
                 try
                 {
                     conn.Open();
-                    SqlCommand selectCross = new SqlCommand("select * from Cross order by T_timestamp", conn);
+                    SqlCommand selectCross = new SqlCommand("select * from Cross_Table order by T_timestamp", conn);
                     SqlDataReader crossesReader = selectCross.ExecuteReader();
 
                     if (crossesReader.HasRows)
@@ -198,7 +198,7 @@ namespace DomoteerService
 
                             log.Debug(" - timestamp: " + c.timestamp);
 
-                            crosses.Add(g);
+                            crosses.Add(c);
                             i++;
                         }
                     }
@@ -227,7 +227,7 @@ namespace DomoteerService
                 {
                     log.Debug("Pre QUERY - timestamp: " + date);
                     conn.Open();
-                    SqlCommand insertCross = new SqlCommand("insert into Cross(T_timestamp) values (@date)", conn);
+                    SqlCommand insertCross = new SqlCommand("insert into Cross_Table(T_timestamp) values (@date)", conn);
                     insertCross.Parameters.AddWithValue("@date", date == null ? "" : date);
                     log.Debug(" - timestamp: " + date);
                     insertCross.ExecuteNonQuery();
