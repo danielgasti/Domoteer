@@ -241,5 +241,12 @@ namespace DomoteerService
                 return "put at: " + date;
             }
         }
+
+        public string getServerTime()
+        {
+            DateTime now = DateTime.Now;
+            log.Debug("Current time requested: " + now.ToString("yyyyMMddHHmmss"));
+            return now.ToString("yyyyMMddHHmmss");
+        }
     }
 }

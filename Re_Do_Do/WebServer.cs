@@ -10,6 +10,9 @@ using Gadgeteer;
 using System.Text;
 using System.IO;
 using System.Collections;
+using GHI.Processor;
+using Microsoft.SPOT.Hardware;
+
 
 
 namespace Re_Do_Do
@@ -132,6 +135,7 @@ namespace Re_Do_Do
             Debug.Print("Network up.");
             led.TurnGreen();
             ListNetworkInterfaces();
+            getServerTime();
         }
 
         /// <summary>
@@ -461,6 +465,57 @@ namespace Re_Do_Do
             this.timestamp = timestamp;
             PutTemperatures(temperature, timestamp);
         }
+
+
+        public void getServerTime()
+        {
+            POSTContent emptyPost = new POSTContent();
+
+            // Create the request
+            var request = Gadgeteer.Networking.HttpHelper.CreateHttpPostRequest(
+                IPAddress + @"RestService.svc/getServerTime" // the URL to post to
+                , emptyPost // the form values
+                , null // the mime type for an HTTP form
+            );
+
+            request.ResponseReceived += new HttpRequest.ResponseHandler(getServerTime_ResponseReceived);
+
+            // Post the form
+            request.SendRequest();
+        }
+
+        private void getServerTime_ResponseReceived(HttpRequest sender, HttpResponse response)
+        {
+            Debug.Print("Response received:\n");
+            Debug.Print("- response status = " + response.StatusCode);
+            Debug.Print("- response content =\n" + response.Text);
+            if (response.StatusCode == "200")
+            {
+                DateTime dt;
+
+                String timestamp = response.Text.Substring(24, 14);
+                Debug.Print("timestamp acquired: " + timestamp);
+                int yyyy = Int32.Parse(timestamp.Substring(0, 4));
+                int MM = Int32.Parse(timestamp.Substring(4, 2));
+                int dd = Int32.Parse(timestamp.Substring(6, 2));
+                int hh = Int32.Parse(timestamp.Substring(8, 2));
+                int mm = Int32.Parse(timestamp.Substring(10, 2));
+                int ss = Int32.Parse(timestamp.Substring(12, 2));
+
+                dt = new DateTime(yyyy, MM, dd, hh, mm, ss);
+                //Utility.SetLocalTime(dt);
+
+                if(dt.Year < 2011){
+                    return;
+                }
+
+                RealTimeClock.SetDateTime(dt);
+            }
+        }
+
+
+
+
 
     }
 

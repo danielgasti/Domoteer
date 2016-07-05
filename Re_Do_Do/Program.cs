@@ -14,6 +14,7 @@ using GT = Gadgeteer;
 using GTM = Gadgeteer.Modules;
 using Gadgeteer.Modules.GHIElectronics;
 using System.Text;
+using GHI.Processor;
 
 
 namespace Re_Do_Do
@@ -110,7 +111,8 @@ namespace Re_Do_Do
         {
 
             temp = s.getTemp().BinToCelsius().ToString();
-            DateTime startDate = DateTime.Now;
+            //DateTime startDate = DateTime.Now;
+            DateTime startDate = RealTimeClock.GetDateTime();
             Debug.Print("Sending: " + temp + " - " + startDate.ToString("yyyyMMddHHmmss"));
             lpg = sens.MQGetGasPercentage(sens.MQRead() / sens.R0, gas_type.LPG).ToString();
             Debug.Print("Gpl: " + lpg);
@@ -124,26 +126,7 @@ namespace Re_Do_Do
 
         private void GetTemperatures(GTM.GHIElectronics.Button sender, GTM.GHIElectronics.Button.ButtonState state)
         {
-
-
-            Debug.Print("Button pressed");
-            Temperatura t = s.getTemp();
-            DateTime startDate = DateTime.Now;
-
-
-            server.GetTemperatures("4");
-            Debug.Print("Sending: " + t.BinToCelsius().ToString() + " - " + startDate.ToString("yyyyMMddHHmmss"));
-            server.PutTemperatures(t.BinToCelsius().ToString(), startDate.ToString("yyyyMMddHHmmss"));
-
-            double lpg = sens.MQGetGasPercentage(sens.MQRead() / sens.R0, gas_type.LPG);
-            Debug.Print("Gpl: " + lpg);
-            double co = sens.MQGetGasPercentage(sens.MQRead() / sens.R0, gas_type.CO);
-            Debug.Print("CO: " + co);
-            double smoke = sens.MQGetGasPercentage(sens.MQRead() / sens.R0, gas_type.SMOKE);
-            Debug.Print("Smoke: " + smoke);
-
-
-            server.PutGas(lpg.ToString(), co.ToString(), smoke.ToString(), startDate.ToString("yyyyMMddHHmmss"));
+            updateValue();
         }
 
         private void setupWindow()

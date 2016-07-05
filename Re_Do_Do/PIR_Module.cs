@@ -4,6 +4,7 @@ using System;
 using System.Threading;
 using GT = Gadgeteer;
 using GTM = Gadgeteer.Modules;
+using GHI.Processor;
 
 namespace Re_Do_Do
 {
@@ -63,8 +64,7 @@ namespace Re_Do_Do
             Int32 minuto_start;
             Int32 ora_fine;
             Int32 minuto_fine;
-            int ora_vera = 1;
-            int minuto_vero = 1;
+            
             times = Program.time_sett.Split('/');
             init_time = times[0].Split('-');
             end_time = times[1].Split('-');
@@ -73,8 +73,10 @@ namespace Re_Do_Do
             ora_fine = Int32.Parse(end_time[0]);
             minuto_fine = Int32.Parse(end_time[1]);
 
-            DateTime startDate = DateTime.Now;
-
+            //DateTime startDate = DateTime.Now;
+            DateTime startDate = RealTimeClock.GetDateTime();
+            int ora_vera = startDate.Hour;
+            int minuto_vero = startDate.Minute;
 
             if (Int32.Parse(init_time[0]) > Int32.Parse(end_time[0]))
             {

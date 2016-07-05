@@ -60,6 +60,15 @@ namespace DomoteerService
         UriTemplate = "putCross?date={date}")]
         String putCross(String date);
 
+
+        [OperationContract]
+        [WebInvoke(
+        Method = "POST",
+        ResponseFormat = WebMessageFormat.Json,
+        BodyStyle = WebMessageBodyStyle.Wrapped,
+        UriTemplate = "getServerTime")]
+        String getServerTime();
+
     }
 
 
